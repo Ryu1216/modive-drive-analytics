@@ -1,72 +1,73 @@
-# OSX
-#
+# macOS
 .DS_Store
 
-# Xcode
-#
-build/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
+# Watchman
+.watchmanconfig
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Metro
+.metro-cache/
+.metro-health-check*
+
+# Android
+android/.gradle/
+android/.idea/
+android/.cxx/
+android/app/build/
+android/build/
+android/local.properties
+android/*.iml
+*.keystore
+!android/app/debug.keystore
+
+# iOS
+ios/Pods/
+ios/build/
+ios/DerivedData/
+ios/*.xcworkspace
+ios/*.xcodeproj/project.xcworkspace/
+ios/*.pbxuser
+ios/*.mode1v3
+ios/*.mode2v3
+ios/*.perspectivev3
+ios/*.xcuserstate
 xcuserdata
 *.xccheckout
 *.moved-aside
-DerivedData
-*.hmap
 *.ipa
-*.xcuserstate
-**/.xcode.env.local
-
-# Android/IntelliJ
-#
-build/
-.idea
-.gradle
-local.properties
-*.iml
-*.hprof
-.cxx/
-*.keystore
-!debug.keystore
-.kotlin/
-
-# node.js
-#
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
-
-**/fastlane/report.xml
-**/fastlane/Preview.html
-**/fastlane/screenshots
-**/fastlane/test_output
-
-# Bundle artifact
-*.jsbundle
+*.hmap
+.xcode.env
+.xcode.env.local
 
 # Ruby / CocoaPods
-**/Pods/
 /vendor/bundle/
+Gemfile.lock
 
-# Temporary files created by Metro to check the health of the file watcher
-.metro-health-check*
+# Bundle artifacts
+*.jsbundle
 
-# testing
-/coverage
+# Testing
+jest-test-results.json
 
-# Yarn
+# Fastlane
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots/
+**/fastlane/test_output/
+
+# Coverage
+coverage/
+
+# Env files
+.env
+.env.*
+*.env.*
+
+# Yarn v2+
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
