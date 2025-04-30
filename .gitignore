@@ -76,4 +76,4 @@ coverage/
 !.yarn/versions
 
 # Ignore bundle folder
-bundle/
+.bundle/
