@@ -74,3 +74,6 @@ coverage/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Ignore bundle folder
+bundle/
