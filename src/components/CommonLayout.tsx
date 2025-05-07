@@ -4,8 +4,8 @@ import {
     Platform,
     StyleSheet,
   } from 'react-native';
-
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 type Props = {
     children: React.ReactNode;
