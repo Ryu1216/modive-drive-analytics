@@ -5,8 +5,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import HomeScreen from '../screens/Home/HomeScreen';
-import FeedbackScreen from '../screens/Home/FeedbackScreen';
+import DashboardScreen from '../screens/Dashboard/DashboardScreen';
+import FeedbackScreen from '../screens/Dashboard/FeedbackScreen';
 import DrivingScreen from '../screens/Driving/DrivingScreen';
 import SeedsScreen from '../screens/Seeds/SeedsScreen';
 import MypageScreen from '../screens/Mypage/MypageScreen';
@@ -16,12 +16,12 @@ import CustomHeader from '../components/CustomHeader';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function HomeStack() {
+function DashboardStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Dashboard"
+        component={DashboardScreen}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
@@ -101,7 +101,7 @@ export default function TabNavigator() {
       <Tab.Screen name="홈">
         {() => (
           <ScreenLayout>
-            <HomeStack />
+            <DashboardStack />
           </ScreenLayout>
         )}
       </Tab.Screen>

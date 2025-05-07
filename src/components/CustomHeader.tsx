@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 
 type Props = {
   leftType?: 'back' | 'logo' | 'none';
-  rightType?: 'share' | 'edit' | 'none';
+  rightType?: 'share' | 'edit' | 'close' | 'none';
   title?: string;
 };
 
@@ -28,7 +28,7 @@ function CustomHeader({
         if (leftType === 'logo') {
             return (
                 <Image
-                    source={require('../assets/modive_logo.png')}
+                    source={require('../assets/modive_logo1.png')}
                     style={{ width: 100, height: 24, resizeMode: 'contain' }}
                 />
             );

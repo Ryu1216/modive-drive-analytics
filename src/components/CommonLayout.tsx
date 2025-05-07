@@ -2,9 +2,10 @@ import React from 'react';
 import {
     KeyboardAvoidingView,
     Platform,
-    SafeAreaView,
     StyleSheet,
   } from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
     children: React.ReactNode;
@@ -12,7 +13,7 @@ type Props = {
 
 function CommonLayout({ children }: Props) {
     return (
-        <SafeAreaView style={styles.safe}>
+        <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
             <KeyboardAvoidingView
                 style={styles.keyboard}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
