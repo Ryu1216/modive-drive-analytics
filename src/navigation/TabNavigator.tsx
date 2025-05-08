@@ -8,6 +8,7 @@ import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons'
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import FeedbackScreen from '../screens/Dashboard/FeedbackScreen';
 import DrivingScreen from '../screens/Driving/DrivingScreen';
+import DrivingHistoryScreen from '../screens/Driving/DrivingHistoryScreen';
 import SeedsScreen from '../screens/Seeds/SeedsScreen';
 import MypageScreen from '../screens/Mypage/MypageScreen';
 import ScreenLayout from '../components/CommonLayout';
@@ -41,10 +42,17 @@ function DrivingStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="DrivingHistory"
+        component={DrivingHistoryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="Driving"
         component={DrivingScreen}
         options={{
-          header: () => <CustomHeader leftType="logo" rightType="none" />,
+          header: () => <CustomHeader leftType="back" rightType="none" title="주행 상세" />,
         }}
       />
     </Stack.Navigator>
