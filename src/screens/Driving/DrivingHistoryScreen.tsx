@@ -3,14 +3,14 @@ import {
   View, 
   Text, 
   StyleSheet, 
-  Image, 
-  FlatList, 
-  TouchableOpacity,
   SafeAreaView,
   StatusBar,
-  Dimensions
+  Dimensions,
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Svg, { Defs, LinearGradient, Stop, Polyline } from 'react-native-svg';
 import CustomHeader from '../../components/CustomHeader';
 
 // 화면 너비 구하기
@@ -93,68 +93,75 @@ export default function DrivingHistoryScreen() {
     }
   ]);
   
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   
-  const renderDriveHistoryItem = ({ item }: { item: DriveHistoryItem }) => {
+  // Navigate to driving detail screen
+  const handleDriveItemPress = (driveId: string) => {
+    navigation.navigate('DrivingDetail', { drivingId: driveId });
+  };
+  
+  const renderDriveHistoryItem = (item: DriveHistoryItem, index: number) => {
     return (
-      <TouchableOpacity 
-        style={styles.historyItemContainer}
-        onPress={() => console.log(`주행 기록 ${item.driveId} 선택됨`)}
-      >
-        <View style={styles.historyItem}>
+      <View key={item.driveId} style={styles.historyItemWrapper}>
+        <View style={styles.timelineContainer}>
+          <View style={styles.timelineDot} />
+        </View>
+        
+        <TouchableOpacity 
+          style={styles.historyItem}
+          onPress={() => handleDriveItemPress(item.driveId)}
+          activeOpacity={0.7}
+        >
           <View style={styles.leftContent}>
-            <Text style={styles.dateTimeText}>
+            <Text style={styles.dateText}>
               {formatDate(item.date)}
             </Text>
-            <Text style={styles.dateTimeText}>
+            <Text style={styles.timeText}>
               {formatTime(item.startTime, item.endTime)}
             </Text>
           </View>
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>{item.summaryScore.toFixed(2)}</Text>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   };
   
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-      <CustomHeader leftType="logo" title="" />
       
-      <View style={styles.container}>
+      <View style={[styles.container, /* ensure container unchanged */]}>   
         <Text style={styles.title}>주행 히스토리</Text>
+        <Text style={styles.subtitle}>지금까지의 주행데이터를 확인하세요</Text>
+        
+        <Svg width="100%" height={100} style={{ marginTop: 30, marginBottom: 40 }}>
+          <Defs>
+            <LinearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <Stop offset="0%" stopColor="#4945FF" />
+              <Stop offset="100%" stopColor="#6C63FF" />
+            </LinearGradient>
+          </Defs>
+          <Polyline
+            points="15,80 80,40 160,60 240,10"
+            fill="none"
+            stroke="url(#lineGrad)"
+            strokeWidth={4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </Svg>
         
         <View style={styles.listHeaderContainer}>
-          <Text style={styles.listHeaderLeft}>주행일시</Text>
+          <Text style={styles.listHeaderLeft}>        주행일시</Text>
           <Text style={styles.listHeaderRight}>주행점수</Text>
         </View>
         
-        <View style={styles.divider} />
-        
-        <FlatList
-          data={driveHistory}
-          renderItem={renderDriveHistoryItem}
-          keyExtractor={item => item.driveId}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={() => (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>주행 기록이 없습니다.</Text>
-            </View>
-          )}
-        />
-        
-        {/* 피그마 디자인에 맞게 하단 페이지 인디케이터 영역 구현 */}
-        <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>지금까지의 주행데이터를 확인하세요</Text>
-          <View style={styles.indicatorContainer}>
-            <View style={[styles.indicator, styles.activeIndicator]} />
-            <View style={styles.indicator} />
-            <View style={styles.indicator} />
-            <View style={styles.indicator} />
-          </View>
+        <View style={[styles.historyListContainer, { position: 'relative', marginTop: 0 }]
+        }>
+          <View style={styles.fullTimelineLine} />
+          {driveHistory.map((item, index) => renderDriveHistoryItem(item, index))}
         </View>
       </View>
     </SafeAreaView>
@@ -170,125 +177,104 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
-    paddingTop: 10,
   },
   title: {
     fontFamily: 'Pretendard-Bold',
     fontSize: 32,
+    fontWeight: 'bold',
     color: '#4945FF',
-    marginBottom: 20,
-    fontWeight: '700',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 16,
+    color: '#000000',
+    marginBottom: 10,
   },
   listHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
-    paddingHorizontal: 5,
   },
   listHeaderLeft: {
     fontFamily: 'Pretendard-Medium',
     fontSize: 15,
     color: '#000000',
-    fontWeight: '500',
+    marginLeft: 30,
   },
   listHeaderRight: {
     fontFamily: 'Pretendard-Medium',
     fontSize: 15,
     color: '#000000',
-    fontWeight: '500',
-    textAlign: 'right',
+    marginRight: 10,
   },
-  divider: {
-    height: 4,
-    backgroundColor: '#000000',
+  historyListContainer: {
+    flex: 1,
+  },
+  historyItemWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 15,
-    width: '100%',
   },
-  listContainer: {
-    flexGrow: 1, // FlatList가 남은 공간을 모두 차지하도록 설정
-    paddingBottom: 20,
+  timelineContainer: {
+    alignItems: 'center',
+    width: 30,
+    marginRight: 10,
   },
-  historyItemContainer: {
-    marginBottom: 10,
-    width: '100%',
+  timelineDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#4945FF',
+    borderWidth: 4,
+    borderColor: '#FFFFFF',
+    zIndex: 2,
+  },
+  fullTimelineLine: {
+    position: 'absolute',
+    left: 15,
+    top: 0,
+    bottom: 0,
+    width: 2,
+    backgroundColor: '#D0D0D0',
   },
   historyItem: {
+    flex: 1,
     backgroundColor: '#F2F2FF',
-    borderRadius: 15,
-    padding: 15,
-    paddingVertical: 20,
+    borderRadius: 20,
+    padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '100%',
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   leftContent: {
     flex: 1,
   },
-  dateTimeText: {
+  dateText: {
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 16,
     color: '#000000',
-    lineHeight: 24,
-    fontWeight: '600',
+    marginBottom: 4,
+  },
+  timeText: {
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 16,
+    color: '#000000',
   },
   scoreContainer: {
-    paddingLeft: 10,
     justifyContent: 'center',
-    alignItems: 'center',
   },
   scoreText: {
     fontFamily: 'Pretendard-SemiBold',
-    fontSize: 16,
+    fontSize: 20,
     color: '#000000',
-    textAlign: 'right',
     fontWeight: '600',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  emptyText: {
-    fontFamily: 'Pretendard-Medium',
-    fontSize: 16,
-    color: '#666666',
-    fontWeight: '500',
-  },
-  footerContainer: {
-    paddingVertical: 20,
-    alignItems: 'center',
-  },
-  footerText: {
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 16,
-    color: '#000000',
-    marginBottom: 15,
-    fontWeight: '400',
-  },
-  indicatorContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-  },
-  indicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#000000',
-    marginHorizontal: 4,
-    opacity: 0.3,
-  },
-  activeIndicator: {
-    opacity: 1,
   },
 });
