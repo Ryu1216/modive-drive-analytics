@@ -1,6 +1,6 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -32,7 +32,13 @@ function DashboardStack() {
         name="Feedback"
         component={FeedbackScreen}
         options={{
-          header: () => <CustomHeader leftType="back" rightType="share" title="주간 주행 리포트" />,
+          header: () => (
+            <CustomHeader
+              leftType="back"
+              rightType="share"
+              title="주간 주행 리포트"
+            />
+          ),
         }}
       />
     </Stack.Navigator>
@@ -66,7 +72,7 @@ function DrivingStack() {
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 function SeedsStack() {
@@ -80,7 +86,7 @@ function SeedsStack() {
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 function MypageStack() {
@@ -94,28 +100,33 @@ function MypageStack() {
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({route}) => ({
         headerShown: false,
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({color, size}) => {
           if (route.name === '홈')
             return <AntDesign name="home" size={size} color={color} />;
           if (route.name === '주행기록')
             return <Feather name="pie-chart" size={size} color={color} />;
           if (route.name === '리워드')
-            return <MaterialCommunity name="seed-outline" size={size} color={color} />;
+            return (
+              <MaterialCommunity
+                name="seed-outline"
+                size={size}
+                color={color}
+              />
+            );
           if (route.name === '마이페이지')
             return <Feather name="user" size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#4a90e2',
+        tabBarActiveTintColor: '#4945FF',
         tabBarInactiveTintColor: 'gray',
-      })}
-    >
+      })}>
       <Tab.Screen name="홈">
         {() => (
           <ScreenLayout>
