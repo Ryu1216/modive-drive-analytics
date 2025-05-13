@@ -2,11 +2,9 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  Button,
   Switch,
   StyleSheet,
   Image,
-  ScrollView,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
@@ -82,7 +80,7 @@ export default function DashboardScreen() {
     {
       icon: (
         <MaterialCommunityIcons name="chart-bell-curve-cumulative" size={15} />
-      ), // 추천 아이콘
+      ),
       label: '누적 운전 횟수',
       value: `${dashboard.totalDriveCount}회`,
     },
@@ -173,146 +171,125 @@ export default function DashboardScreen() {
     },
   ];
 
-  const series = [
-    {value: 430, color: '#fbd203'},
-    {value: 321, color: '#ffb300'},
-    {value: 185, color: '#ff9100'},
-    {value: 123, color: '#ff6c00'},
-  ];
-
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{flexGrow: 1, paddingBottom: 40}}
-      keyboardShouldPersistTaps="handled">
-      {/* 상단 프로필 */}
-      <View style={styles.profileHeader}>
-        <Text style={styles.username}>
-          <Text style={styles.highlight}>{userInfo.name}</Text>님의 운전 프로필
-        </Text>
-        <View style={styles.toggleArea}>
-          <Feather name="volume-2" size={22} color="#4945FF" />
-          <Switch
-            trackColor={{false: '#767577', true: '#4945FF'}}
-            thumbColor={isEnabled ? '#fff' : '#fff'}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
-        </View>
-      </View>
-
-      {/* Mobti + 점수 */}
-      <View style={styles.mobtiBox}>
-        <Image
-          source={require('../../assets/Mobti_AIUE.png')}
-          style={styles.mobtiImg}
-        />
-        <View style={styles.mobtiTextBox}>
-          <Text style={styles.mobtiLabel}>Mobti</Text>
-          <Text style={styles.mobtiTitle}>
-            <Text style={styles.mobtiType}>AIUE</Text> - 자유로운 드라이버
-          </Text>
-          <Text style={styles.scoreText}>
-            종합점수{' '}
-            <Text style={styles.scoreValue}>{dashboard.summaryScore}</Text>
-            <Text style={{color: '#EC008C'}}>점</Text>
-          </Text>
-
-          <View style={styles.scoreBar}>
-            <View style={{borderRadius: 15, overflow: 'hidden'}}>
-              <LinearGradient
-                colors={['#CCCCFF', '#4945FF']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
-                style={[
-                  styles.scoreProgress,
-                  {width: `${dashboard.summaryScore}%`},
-                ]}
+    <FlatList
+      data={drivingReportData}
+      keyExtractor={(_, index) => index.toString()}
+      numColumns={2}
+      columnWrapperStyle={styles.gridRow}
+      style={{backgroundColor: '#fff'}}
+      contentContainerStyle={styles.container}
+      ListHeaderComponent={
+        <>
+          {/* 상단 프로필 */}
+          <View style={styles.profileHeader}>
+            <Text style={styles.username}>
+              <Text style={styles.highlight}>{userInfo.nickname}</Text>님의 운전
+              프로필
+            </Text>
+            <View style={styles.toggleArea}>
+              <Feather name="volume-2" size={22} color="#4945FF" />
+              <Switch
+                trackColor={{false: '#767577', true: '#4945FF'}}
+                thumbColor={isEnabled ? '#fff' : '#fff'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
               />
             </View>
           </View>
-        </View>
-      </View>
 
-      {/* 주행 기록 영역 */}
-      <View style={styles.driveInfoBox}>
-        {driveInfoItems.map((item, index) => (
-          <View style={styles.driveRecordBox} key={index}>
-            <View style={styles.driveRecordLabel}>
-              {item.icon}
-              <Text>{item.label}</Text>
-            </View>
-            <Text style={styles.mainColorText}>{item.value}</Text>
-          </View>
-        ))}
-      </View>
-
-      {/* 운전 점수 리포트 */}
-      <View style={styles.reportBox}>
-        <Text style={styles.username}>운전 점수 리포트</Text>
-        <FlatList
-          data={drivingReportData}
-          renderItem={({item}) => (
-            <View style={[styles.gridItem, {borderColor: item.color}]}>
-              <Text style={[styles.cardTitle, {backgroundColor: item.color}]}>
-                {item.title}
+          {/* Mobti + 점수 */}
+          <View style={styles.mobtiBox}>
+            <Image
+              source={require('../../assets/Mobti_AIUE.png')}
+              style={styles.mobtiImg}
+            />
+            <View style={styles.mobtiTextBox}>
+              <Text style={styles.mobtiLabel}>Mobti</Text>
+              <Text style={styles.mobtiTitle}>
+                <Text style={styles.mobtiType}>AIUE</Text> - 자유로운 드라이버
               </Text>
-
-              {/* 차트 + 범례 */}
-              <View style={styles.cardContent}>
-                <View style={styles.scoreCard}>
-                  <PieChart
-                    widthAndHeight={100}
-                    series={item.data.map(dataItem => ({
-                      value: dataItem.value,
-                      color: dataItem.color,
-                    }))}
-                    cover={0.7}
+              <Text style={styles.scoreText}>
+                종합점수{' '}
+                <Text style={styles.scoreValue}>{dashboard.summaryScore}</Text>
+                <Text style={{color: '#EC008C'}}>점</Text>
+              </Text>
+              <View style={styles.scoreBar}>
+                <View style={{borderRadius: 15, overflow: 'hidden'}}>
+                  <LinearGradient
+                    colors={['#CCCCFF', '#4945FF']}
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}
+                    style={[
+                      styles.scoreProgress,
+                      {width: `${dashboard.summaryScore}%`},
+                    ]}
                   />
-                  <View style={styles.chartCenterText}>
-                    <Text
-                      style={[styles.centerScoreText, {color: item.textColor}]}>
-                      {item.score.toFixed(2)}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.legendBox}>
-                  {item.data.map((dataItem, index) => (
-                    <View key={index} style={styles.legendRow}>
-                      <View
-                        style={[
-                          styles.legendDot,
-                          {backgroundColor: dataItem.color},
-                        ]}
-                      />
-                      <Text style={styles.legendLabel}>
-                        {dataItem.label.text}: {dataItem.value}점
-                      </Text>
-                    </View>
-                  ))}
                 </View>
               </View>
             </View>
-          )}
-          keyExtractor={(_, index) => index.toString()}
-          numColumns={2}
-          columnWrapperStyle={styles.gridRow}
-        />
-      </View>
+          </View>
 
-      {/* <View style={styles.weeklyButton}>
-        <Button
-          title="주간 주행 리포트 보기"
-          onPress={() => navigation.navigate('Feedback')}
-        />
-      </View> */}
+          {/* 주행 기록 */}
+          <View style={styles.driveInfoBox}>
+            {driveInfoItems.map((item, index) => (
+              <View style={styles.driveRecordBox} key={index}>
+                <View style={styles.driveRecordLabel}>
+                  {item.icon}
+                  <Text>{item.label}</Text>
+                </View>
+                <Text style={styles.mainColorText}>{item.value}</Text>
+              </View>
+            ))}
+          </View>
 
-      <TouchableOpacity
-        style={styles.weeklyButton}
-        onPress={() => navigation.navigate('Feedback')}>
-        <Text style={styles.weeklyButtonText}>주간 주행 리포트 보기</Text>
-      </TouchableOpacity>
-    </ScrollView>
+          {/* 타이틀 */}
+          <View style={styles.reportBox}>
+            <Text style={styles.username}>운전 점수 리포트</Text>
+          </View>
+        </>
+      }
+      renderItem={({item}) => (
+        <View style={[styles.gridItem, {borderColor: item.color}]}>
+          <Text style={[styles.cardTitle, {backgroundColor: item.color}]}>
+            {item.title}
+          </Text>
+          <View style={styles.cardContent}>
+            <View style={styles.scoreCard}>
+              <PieChart
+                widthAndHeight={100}
+                series={item.data.map(d => ({value: d.value, color: d.color}))}
+                cover={0.7}
+              />
+              <View style={styles.chartCenterText}>
+                <Text style={[styles.centerScoreText, {color: item.textColor}]}>
+                  {item.score.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.legendBox}>
+              {item.data.map((d, idx) => (
+                <View key={idx} style={styles.legendRow}>
+                  <View
+                    style={[styles.legendDot, {backgroundColor: d.color}]}
+                  />
+                  <Text style={styles.legendLabel}>
+                    {d.label.text}: {d.value}점
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+      )}
+      ListFooterComponent={
+        <TouchableOpacity
+          style={styles.weeklyButton}
+          onPress={() => navigation.navigate('Feedback')}>
+          <Text style={styles.weeklyButtonText}>주간 주행 리포트 보기</Text>
+        </TouchableOpacity>
+      }
+    />
   );
 }
 
@@ -396,15 +373,6 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 5,
   },
-  carIcon: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    resizeMode: 'contain',
-    top: -10, // 너무 위로 올라간 것
-    left: '87.12%', // 종합점수 위치 기준
-    marginLeft: -15, // 아이콘 가운데 정렬
-  },
   driveInfoBox: {
     backgroundColor: '#F1F5FD',
     borderRadius: 15,
@@ -432,8 +400,7 @@ const styles = StyleSheet.create({
   // 운전 점수 리포트
   reportBox: {
     marginTop: 40,
-    // padding: 15,
-    gap: 8,
+    marginBottom: 10,
   },
   gridRow: {
     justifyContent: 'space-between',
