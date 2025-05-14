@@ -21,8 +21,8 @@ package-lock.json
 android/.gradle/
 android/.idea/
 android/.cxx/
-android/**/app/.cxx/  # 모든 app/.cxx 폴더도 제외
-android/app/.cxx/     # 명확한 경로 지정
+android/**/app/.cxx/ 
+android/app/.cxx/   
 android/app/build/
 android/build/
 android/local.properties

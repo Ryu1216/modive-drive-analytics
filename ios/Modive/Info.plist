@@ -53,6 +53,8 @@
       <string>AntDesign.ttf</string>
       <string>Feather.ttf</string>
       <string>MaterialCommunityIcons.ttf</string>
+      <string>Ionicons</string>
+      <string>FontAwesome</string>
     </array>
 </dict>
 </plist>
