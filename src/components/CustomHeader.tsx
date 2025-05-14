@@ -2,6 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
+import Logo from '../assets/modive_logo.svg';
 
 type Props = {
   leftType?: 'back' | 'logo' | 'none';
@@ -26,12 +27,7 @@ function CustomHeader({
     }
 
     if (leftType === 'logo') {
-      return (
-        <Image
-          source={require('../assets/modive_logo1.png')}
-          style={{width: 100, height: 24, resizeMode: 'contain'}}
-        />
-      );
+      return <Logo width={100} height={24} />;
     }
     return <View style={{width: 24}} />;
   };
