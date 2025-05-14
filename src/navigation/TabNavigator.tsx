@@ -1,12 +1,12 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
-import FeedbackScreen from '../screens/Dashboard/FeedbackScreen';
+import ReportScreen from '../screens/Dashboard/ReportScreen';
 import DrivingScreen from '../screens/Driving/DrivingScreen';
 import DrivingHistoryScreen from '../screens/Driving/DrivingHistoryScreen';
 import DrivingDetailScreen from '../screens/Driving/DrivingDetailScreen';
@@ -15,6 +15,10 @@ import SeedsScreen from '../screens/Seeds/SeedsScreen';
 import MypageScreen from '../screens/Mypage/MypageScreen';
 import ScreenLayout from '../components/CommonLayout';
 import CustomHeader from '../components/CustomHeader';
+import MypageInterestScreen from '../screens/Mypage/subpage/MypageInterestScreen.tsx';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import MypageCarScreen from '../screens/Mypage/subpage/MypageCarScreen.tsx';
+import MypageInfoScreen from '../screens/Mypage/subpage/MypageInfoScreen.tsx';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,9 +35,15 @@ function DashboardStack() {
       />
       <Stack.Screen
         name="Feedback"
-        component={FeedbackScreen}
+        component={ReportScreen}
         options={{
-          header: () => <CustomHeader leftType="back" rightType="share" title="주간 주행 리포트" />,
+          header: () => (
+            <CustomHeader
+              leftType="back"
+              rightType="share"
+              title="주간 주행 리포트"
+            />
+          ),
         }}
       />
     </Stack.Navigator>
@@ -54,7 +64,9 @@ function DrivingStack() {
         name="Driving"
         component={DrivingScreen}
         options={{
-          header: () => <CustomHeader leftType="back" rightType="none" title="주행 상세" />,
+          header: () => (
+            <CustomHeader leftType="back" rightType="none" title="주행 상세" />
+          ),
         }}
       />
       <Stack.Screen
@@ -74,7 +86,7 @@ function DrivingStack() {
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 function SeedsStack() {
@@ -88,7 +100,7 @@ function SeedsStack() {
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 function MypageStack() {
@@ -101,29 +113,76 @@ function MypageStack() {
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
       />
+      <Stack.Screen
+        name="mypage_car"
+        component={MypageCarScreen}
+        options={({ navigation }) => ({
+          headerTitle: '내 차 정보',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
+              <Image
+                source={require('../assets/prior_button.png')}
+                style={styles.backArrowIcon} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="mypage_info"
+        component={MypageInfoScreen}
+        options={({ navigation }) => ({
+          headerTitle: '내 정보',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
+              <Image
+                source={require('../assets/prior_button.png')}
+                style={styles.backArrowIcon} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="mypage_interest"
+        component={MypageInterestScreen}
+        options={({ navigation }) => ({
+          headerTitle: '내 관심사',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
+              <Image
+                source={require('../assets/prior_button.png')}
+                style={styles.backArrowIcon} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Stack.Navigator>
-  )
+  );
 }
 
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({route}) => ({
         headerShown: false,
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({color, size}) => {
           if (route.name === '홈')
             return <AntDesign name="home" size={size} color={color} />;
           if (route.name === '주행기록')
             return <Feather name="pie-chart" size={size} color={color} />;
           if (route.name === '리워드')
-            return <MaterialCommunity name="seed-outline" size={size} color={color} />;
+            return (
+              <MaterialCommunity
+                name="seed-outline"
+                size={size}
+                color={color}
+              />
+            );
           if (route.name === '마이페이지')
             return <Feather name="user" size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#4a90e2',
+        tabBarActiveTintColor: '#4945FF',
         tabBarInactiveTintColor: 'gray',
-      })}
-    >
+      })}>
       <Tab.Screen name="홈">
         {() => (
           <ScreenLayout>
@@ -155,3 +214,17 @@ export default function TabNavigator() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  backArrow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width:100,
+  },
+  backArrowIcon: {
+    width: 24,
+    height: 24,
+  },
+
+})
