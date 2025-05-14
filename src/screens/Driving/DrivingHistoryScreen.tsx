@@ -56,7 +56,6 @@ const colors = {
 };
 
 export default function DrivingHistoryScreen() {
-  // 피그마 디자인에 있는 샘플 데이터와 일치하도록 설정
   const [driveHistory, setDriveHistory] = useState<DriveHistoryItem[]>([
     {
       "driveId": "drive_001",

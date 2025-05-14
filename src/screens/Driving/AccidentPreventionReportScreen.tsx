@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import Svg, {Path, Circle, G, Text as SvgText, Line} from 'react-native-svg';
 import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
+import HeaderDropdown from '../../components/common/HeaderDropdown';
 
 // 색상 시스템 정의 - 보라색 테마
 const COLORS = {
@@ -673,15 +674,11 @@ const AccidentPreventionReportScreen = () => {
           onPress={() => navigation.goBack()}>
           <Icon name="chevron-left" size={24} color="#333" />
         </TouchableOpacity>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerText}>사고 예방 점수</Text>
-          <Icon
-            name="chevron-down"
-            size={14}
-            color="#666"
-            style={styles.headerDropdown}
-          />
-        </View>
+        <HeaderDropdown 
+          currentScreen="accident" 
+          primaryColor={COLORS.primary} 
+          textColor={COLORS.text.primary}
+        />
         <View style={styles.placeholderRight} />
       </View>
 
