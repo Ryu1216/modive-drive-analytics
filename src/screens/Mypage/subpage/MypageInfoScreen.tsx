@@ -9,7 +9,7 @@ export default function MypageInfoScreen() {
     <View style={styles.contentContainer}>
       <Text style={styles.title}>이름</Text>
       <View style={styles.block}>
-          <Text style={styles.blockText}> 신예빈 </Text>
+          <Text style={styles.blockText}> 홍길동 </Text>
       </View>
     </View>
     <View style={styles.contentContainer}>
@@ -26,7 +26,7 @@ export default function MypageInfoScreen() {
     <View style={styles.contentContainer}>
       <Text style={styles.title}>이메일</Text>
       <View style={styles.block}>
-        <Text style={styles.blockText}> dpqls9799@naver.com </Text>
+        <Text style={styles.blockText}> hong@email.com </Text>
       </View>
     </View>
     <TouchableOpacity

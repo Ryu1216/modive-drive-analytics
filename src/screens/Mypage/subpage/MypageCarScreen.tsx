@@ -34,13 +34,21 @@ export default function MypageCarScreen({navigation}) {
         >ㅗ
           <View style={styles.modalBackground}>
             <View style={styles.modalContainer}>
-              <Text style={styles.modalText}>이 차량으로 등록할까요?</Text>
-              <Text style={styles.modalText}>{number}</Text>
+              <Text style={styles.modalTitle}>이 차량으로 등록할까요?</Text>
+              <Text style={styles.modalNum}>{number}</Text>
               <Text style={styles.modalText}>선택한 차량으로 설정돼요.</Text>
               <Text style={styles.modalText}>나중에 언제든 바꿀 수 있어요.</Text>
               <View style={styles.modalButtonContainer}>
-                <Button title="닫기" onPress={() => setVisible(false)} />
-                <Button title="열기" onPress={() => setVisible(false)} />
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setVisible(false)} >
+                  <Text style={styles.modalButtonText}>삭제하기</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setVisible(false)} >
+                  <Text style={styles.modalButtonText}>차량 선택</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -51,12 +59,7 @@ export default function MypageCarScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.editContainer}>
-        <View/>
-        <TouchableOpacity onPress={() => navigation.navigate('mypage_car_edit')}>
-          <Text style={styles.editButton}>편집</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.editContainer}/>
       {carList()}
       <TouchableOpacity
         style={styles.button}
@@ -139,17 +142,40 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: 300,
-    padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
   },
+  modalTitle: {
+    marginTop: 30,
+    fontSize: 20,
+    color: '#565656',
+  },
+  modalNum: {
+    margin: 25,
+    fontSize: 20,
+    color: '#111111',
+  },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 3,
     fontSize: 16,
+    color: '#565656',
   },
   modalButtonContainer: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  modalButton: {
+    width: '50%',
+    height: 50,
+    borderWidth: 0.5,
+    borderColor: '#D9D9D9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    fontSize: 16,
+    color: '#378CFF',
   }
 })
