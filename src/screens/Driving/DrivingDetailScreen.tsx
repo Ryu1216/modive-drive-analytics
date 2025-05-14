@@ -94,6 +94,9 @@ type DrivingStackParamList = {
   Driving: undefined;
   DrivingDetail: undefined;
   SafetyReport: undefined;
+  CarbonEmissionReport: undefined;
+  AccidentPreventionReport: undefined;
+  AttentionScoreReport: undefined;
 };
 
 const DrivingDetailScreen = () => {
@@ -172,10 +175,15 @@ const DrivingDetailScreen = () => {
             <TouchableOpacity
               key={idx}
               style={[styles.circleCard, {backgroundColor: cardBgColors[idx]}]}
-              activeOpacity={0.7}
-              onPress={() => {
+              activeOpacity={0.7}              onPress={() => {
                 if (score.name === '안전 운전 점수') {
                   navigation.navigate('SafetyReport');
+                } else if (score.name === '탄소 배출 및 연비 점수') {
+                  navigation.navigate('CarbonEmissionReport');
+                } else if (score.name === '사고 예방 점수') {
+                  navigation.navigate('AccidentPreventionReport');
+                } else if (score.name === '주의력 점수') {
+                  navigation.navigate('AttentionScoreReport');
                 }
               }}
               accessibilityLabel={`${score.name}: ${Math.round(score.value)}%`}>
