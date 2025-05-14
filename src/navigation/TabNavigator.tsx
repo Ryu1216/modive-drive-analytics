@@ -12,6 +12,10 @@ import SeedsScreen from '../screens/Seeds/SeedsScreen';
 import MypageScreen from '../screens/Mypage/MypageScreen';
 import ScreenLayout from '../components/CommonLayout';
 import CustomHeader from '../components/CustomHeader';
+import MypageInterestScreen from '../screens/Mypage/subpage/MypageInterestScreen.tsx';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import MypageCarScreen from '../screens/Mypage/subpage/MypageCarScreen.tsx';
+import MypageInfoScreen from '../screens/Mypage/subpage/MypageInfoScreen.tsx';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -75,6 +79,48 @@ function MypageStack() {
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
       />
+      <Stack.Screen
+        name="mypage_car"
+        component={MypageCarScreen}
+        options={({ navigation }) => ({
+          headerTitle: '내 차 정보',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
+              <Image
+                source={require('../assets/prior_button.png')}
+                style={styles.backArrowIcon} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="mypage_info"
+        component={MypageInfoScreen}
+        options={({ navigation }) => ({
+          headerTitle: '내 정보',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
+              <Image
+                source={require('../assets/prior_button.png')}
+                style={styles.backArrowIcon} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="mypage_interest"
+        component={MypageInterestScreen}
+        options={({ navigation }) => ({
+          headerTitle: '내 관심사',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
+              <Image
+                source={require('../assets/prior_button.png')}
+                style={styles.backArrowIcon} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Stack.Navigator>
   )
 }
@@ -129,3 +175,17 @@ export default function TabNavigator() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  backArrow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width:100,
+  },
+  backArrowIcon: {
+    width: 24,
+    height: 24,
+  },
+
+})
