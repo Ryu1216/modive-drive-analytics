@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, Pressable } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, Pressable, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Defs, LinearGradient, Stop, Polyline } from 'react-native-svg';
 
@@ -156,14 +156,20 @@ export default function DrivingHistoryScreen() {
         </Svg>
         
         <View style={styles.listHeaderContainer}>
-          <Text style={styles.listHeaderLeft}>        주행일시</Text>
+          <Text style={styles.listHeaderLeft}>주행일시</Text>
           <Text style={styles.listHeaderRight}>주행점수</Text>
         </View>
         
-        <View style={[styles.historyListContainer, { position: 'relative', marginTop: 20 }]}>
-           <View style={styles.fullTimelineLine} />
-           {driveHistory.map((item, index) => renderDriveHistoryItem(item, index))}
-         </View>
+        <View style={[styles.historyListContainer]}>
+          <View style={styles.fullTimelineLine} />
+          <FlatList
+            data={driveHistory}
+            renderItem={({ item, index }) => renderDriveHistoryItem(item, index)}
+            keyExtractor={item => item.driveId}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.listContentContainer}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -185,6 +191,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.primary,
     marginBottom: 8,
+    marginTop: 20,
   },
   subtitle: {
     fontFamily: 'Pretendard-Regular',
@@ -211,13 +218,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Medium',
     fontSize: 15,
     color: '#000000',
-    marginLeft: 30,
+    marginLeft: 77,
   },
   listHeaderRight: {
     fontFamily: 'Pretendard-Medium',
     fontSize: 15,
     color: '#000000',
-    marginRight: 10,
+    marginRight: 20,
   },
   historyListContainer: {
     flex: 1,
@@ -290,5 +297,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: colors.primary,
     fontWeight: '700',
+  },
+  listContentContainer: {
+    paddingBottom: 100, // Add padding to prevent content from being cut off
   },
 });

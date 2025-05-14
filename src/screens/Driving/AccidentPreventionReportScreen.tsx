@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
-import Svg, {Path, Circle, G, Text as SvgText, Line} from 'react-native-svg';
+import Svg, {Path, Circle, G, Text as SvgText, Line, Rect} from 'react-native-svg';
 import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
 import HeaderDropdown from '../../components/common/HeaderDropdown';
 
@@ -329,6 +329,491 @@ const TimelineChart = ({
   );
 };
 
+// 반응속도 차트 컴포넌트 - 새로 추가
+const ReactionSpeedChart = ({ events, height = 200 }) => {
+  const width = screenWidth - 80;
+  const chartHeight = height - 40;
+  
+  // 시간을 분 단위로 변환
+  const timeToMinutes = (timeStr) => {
+    const date = new Date(timeStr);
+    return date.getHours() * 60 + date.getMinutes();
+  };
+  
+  // 정렬된 이벤트
+  const sortedEvents = [...events].sort((a, b) => 
+    timeToMinutes(a.time) - timeToMinutes(b.time)
+  );
+  
+  // 시작/종료 시간
+  const startTime = timeToMinutes(sortedEvents[0]?.time) || 0;
+  const endTime = timeToMinutes(sortedEvents[sortedEvents.length - 1]?.time) || startTime + 60;
+  const timeRange = Math.max(endTime - startTime, 60);
+  
+  // 반응 시간 데이터 포인트 생성 (시뮬레이션)
+  const generateDataPoints = () => {
+    const points = [];
+    const numPoints = 50; // 데이터 포인트 수
+    
+    for (let i = 0; i < numPoints; i++) {
+      const minute = startTime + (timeRange * i / (numPoints - 1));
+      
+      // 이벤트 발생 근처에서는 반응 시간 높게 설정
+      const isNearEvent = sortedEvents.some(event => {
+        const eventMinute = timeToMinutes(event.time);
+        return Math.abs(eventMinute - minute) < 2;
+      });
+      
+      // 반응 시간 값 (낮을수록 좋음, 높을수록 나쁨) - 시뮬레이션
+      // 0-1 사이 값으로 정규화 (0이 가장 좋음, 1이 가장 나쁨)
+      const value = isNearEvent ? 
+        0.8 + Math.random() * 0.2 : // 이벤트 근처: 높은 반응 시간 (나쁨)
+        0.2 + Math.random() * 0.4;  // 일반 상황: 낮은-중간 반응 시간
+        
+      const x = ((minute - startTime) / timeRange) * width;
+      const y = chartHeight - (value * (chartHeight - 30)) - 10; // 위쪽이 좋은 값
+      
+      points.push({ x, y, minute, value });
+    }
+    return points;
+  };
+  
+  const dataPoints = generateDataPoints();
+  
+  // SVG 경로 생성
+  const createLinePath = () => {
+    return dataPoints.map((point, index) => 
+      (index === 0 ? 'M' : 'L') + point.x + ',' + point.y
+    ).join(' ');
+  };
+  
+  return (
+    <View style={[styles.chartSpecialContainer, { height }]}>
+      <Text style={styles.chartTitle}>반응 속도 변화 추이</Text>
+      
+      <Svg width={width} height={chartHeight}>
+        {/* 배경 격자 */}
+        <Line 
+          x1={0} y1={chartHeight - 10}
+          x2={width} y2={chartHeight - 10}
+          stroke={COLORS.chart.grid} strokeWidth={1}
+        />
+        <Line 
+          x1={0} y1={(chartHeight - 10) * 0.5}
+          x2={width} y2={(chartHeight - 10) * 0.5}
+          stroke={COLORS.chart.lightGrid} strokeWidth={1}
+          strokeDasharray="5,5"
+        />
+        
+        {/* 위험 구간 표시 */}
+        <Rect 
+          x={0} y={0} 
+          width={width} 
+          height={(chartHeight - 10) * 0.3}
+          fill="rgba(229, 62, 62, 0.1)" 
+        />
+        <SvgText 
+          x={8} y={20} 
+          fill={COLORS.chart.red} 
+          fontSize={11}
+        >
+          위험 구간
+        </SvgText>
+        
+        {/* 반응 시간 선 그래프 */}
+        <Path 
+          d={createLinePath()} 
+          stroke={COLORS.chart.purple}
+          strokeWidth={3}
+          fill="none"
+        />
+        
+        {/* 이벤트 발생 지점 표시 */}
+        {sortedEvents.map((event, index) => {
+          const eventMinute = timeToMinutes(event.time);
+          const x = ((eventMinute - startTime) / timeRange) * width;
+          
+          return (
+            <G key={`event-${index}`}>
+              <Line 
+                x1={x} y1={0} 
+                x2={x} y2={chartHeight - 10} 
+                stroke={COLORS.chart.red}
+                strokeWidth={2}
+                strokeDasharray="3,3"
+              />
+              <Circle 
+                cx={x} cy={10} 
+                r={6} 
+                fill={COLORS.chart.red} 
+              />
+              <SvgText 
+                x={x} y={chartHeight}
+                fontSize={10}
+                fill={COLORS.text.secondary}
+                textAnchor="middle"
+              >
+                {event.formattedTime}
+              </SvgText>
+            </G>
+          );
+        })}
+        
+        {/* 라벨 */}
+        <SvgText x={8} y={chartHeight - 15} fontSize={10} fill={COLORS.text.light}>
+          좋음
+        </SvgText>
+        <SvgText x={8} y={20} fontSize={10} fill={COLORS.chart.red}>
+          나쁨
+        </SvgText>
+      </Svg>
+      
+      <View style={styles.chartLegend}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: COLORS.chart.purple }]} />
+          <Text style={styles.legendText}>반응 시간 추이</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: COLORS.chart.red }]} />
+          <Text style={styles.legendText}>위험 이벤트</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+// 차선이탈 시각화 컴포넌트 - 새로 추가
+const LaneDepartureChart = ({ events, height = 200 }) => {
+  const width = screenWidth - 80;
+  const chartHeight = height - 40;
+  const laneHeight = 40;
+  const roadHeight = laneHeight * 3; // 3개 차선
+  const roadY = (chartHeight - roadHeight) / 2;
+  
+  // 시간을 분 단위로 변환
+  const timeToMinutes = (timeStr) => {
+    const date = new Date(timeStr);
+    return date.getHours() * 60 + date.getMinutes();
+  };
+  
+  // 정렬된 이벤트
+  const sortedEvents = [...events].sort((a, b) => 
+    timeToMinutes(a.time) - timeToMinutes(b.time)
+  );
+  
+  // 시작/종료 시간
+  const startTime = timeToMinutes(sortedEvents[0]?.time) || 0;
+  const endTime = timeToMinutes(sortedEvents[sortedEvents.length - 1]?.time) || startTime + 60;
+  const timeRange = Math.max(endTime - startTime, 60);
+  
+  // 가상의 차선 움직임 (왼쪽/오른쪽 이탈 시뮬레이션)
+  const generateCarPath = () => {
+    const points = [];
+    const segments = 100;
+    const centerY = roadY + laneHeight * 1.5; // 도로 중앙
+    
+    for (let i = 0; i < segments; i++) {
+      const x = (width * i) / (segments - 1);
+      let y = centerY;
+      
+      // 이벤트 발생 근처에서는 차선 이탈 시뮬레이션
+      const progress = i / segments;
+      const currentTime = startTime + timeRange * progress;
+      
+      const nearestEvent = sortedEvents.find(event => {
+        const eventMinute = timeToMinutes(event.time);
+        return Math.abs(eventMinute - currentTime) < 1;
+      });
+      
+      if (nearestEvent) {
+        // 이벤트 발생 위치에서 차선 이탈 (위 또는 아래)
+        const isLeftDeparture = Math.random() > 0.5; // 50% 확률로 왼쪽/오른쪽 차선 이탈
+        const offset = isLeftDeparture ? -laneHeight : laneHeight;
+        
+        // 이탈 시작과 복귀를 부드럽게
+        const eventMinute = timeToMinutes(nearestEvent.time);
+        const distanceFromEvent = Math.abs(eventMinute - currentTime);
+        
+        if (distanceFromEvent < 0.8) {
+          // 가우시안 커브 형태로 이탈 (1에 가까울수록 중앙에서 멀어짐)
+          const deviation = Math.exp(-Math.pow(distanceFromEvent * 2, 2));
+          y += offset * deviation;
+        }
+      }
+      
+      points.push({ x, y });
+    }
+    
+    return points;
+  };
+  
+  const carPathPoints = generateCarPath();
+  
+  // SVG 경로 생성
+  const createCarPath = () => {
+    return carPathPoints.map((point, index) => 
+      (index === 0 ? 'M' : 'L') + point.x + ',' + point.y
+    ).join(' ');
+  };
+  
+  return (
+    <View style={[styles.chartSpecialContainer, { height }]}>
+      <Text style={styles.chartTitle}>차선 이탈 시각화</Text>
+      
+      <Svg width={width} height={chartHeight}>
+        {/* 도로 배경 */}
+        <Rect 
+          x={0} y={roadY} 
+          width={width} height={roadHeight} 
+          fill="#E2E8F0" 
+        />
+        
+        {/* 차선 그리기 */}
+        <Line 
+          x1={0} y1={roadY + laneHeight} 
+          x2={width} y2={roadY + laneHeight}
+          stroke="white" strokeWidth={3} strokeDasharray="10,10"
+        />
+        <Line 
+          x1={0} y1={roadY + laneHeight * 2} 
+          x2={width} y2={roadY + laneHeight * 2}
+          stroke="white" strokeWidth={3} strokeDasharray="10,10"
+        />
+        
+        {/* 운전 경로 */}
+        <Path 
+          d={createCarPath()} 
+          stroke={COLORS.chart.purple}
+          strokeWidth={4}
+          fill="none"
+        />
+        
+        {/* 이벤트 발생 지점 표시 */}
+        {sortedEvents.map((event, index) => {
+          const eventMinute = timeToMinutes(event.time);
+          const x = ((eventMinute - startTime) / timeRange) * width;
+          const isLeftDeparture = index % 2 === 0; // 시뮬레이션: 짝/홀수 인덱스에 따라 왼쪽/오른쪽 이탈
+          
+          const iconY = isLeftDeparture ? 
+            roadY - 10 : // 왼쪽 차선 이탈
+            roadY + roadHeight + 10; // 오른쪽 차선 이탈
+          
+          return (
+            <G key={`lane-event-${index}`}>
+              <Circle cx={x} cy={iconY} r={8} fill={COLORS.chart.red} />
+              <SvgText 
+                x={x} 
+                y={chartHeight} 
+                fontSize={10}
+                fill={COLORS.text.secondary}
+                textAnchor="middle"
+              >
+                {event.formattedTime}
+              </SvgText>
+            </G>
+          );
+        })}
+        
+        {/* 시간 표시 */}
+        <Line 
+          x1={0} y1={chartHeight - 15} 
+          x2={width} y2={chartHeight - 15}
+          stroke={COLORS.chart.grid} strokeWidth={1}
+        />
+        
+        {/* 차량 아이콘 */}
+        <Circle 
+          cx={carPathPoints[carPathPoints.length - 1].x - 5} 
+          cy={carPathPoints[carPathPoints.length - 1].y} 
+          r={8} 
+          fill={COLORS.primary}
+        />
+      </Svg>
+      
+      <View style={styles.chartLegend}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: COLORS.chart.purple }]} />
+          <Text style={styles.legendText}>차량 경로</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: COLORS.chart.red }]} />
+          <Text style={styles.legendText}>차선 이탈</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+// 안전거리 차트 컴포넌트 - 새로 추가
+const SafeDistanceChart = ({ events, height = 200 }) => {
+  const width = screenWidth - 80;
+  const chartHeight = height - 40;
+  
+  // 시간을 분 단위로 변환
+  const timeToMinutes = (timeStr) => {
+    const date = new Date(timeStr);
+    return date.getHours() * 60 + date.getMinutes();
+  };
+  
+  // 정렬된 이벤트
+  const sortedEvents = [...events].sort((a, b) => 
+    timeToMinutes(a.time) - timeToMinutes(b.time)
+  );
+  
+  // 시작/종료 시간
+  const startTime = timeToMinutes(sortedEvents[0]?.time) || 0;
+  const endTime = timeToMinutes(sortedEvents[sortedEvents.length - 1]?.time) || startTime + 60;
+  const timeRange = Math.max(endTime - startTime, 60);
+  
+  // 안전 거리 데이터 포인트 생성 (시뮬레이션)
+  const generateDistanceData = () => {
+    const points = [];
+    const numPoints = 50;
+    const safeDistance = chartHeight * 0.6; // 안전 거리 기준선
+    
+    for (let i = 0; i < numPoints; i++) {
+      const minute = startTime + (timeRange * i / (numPoints - 1));
+      let distance;
+      
+      // 이벤트 발생 근처에서는 안전거리 위반
+      const isNearEvent = sortedEvents.some(event => {
+        const eventMinute = timeToMinutes(event.time);
+        return Math.abs(eventMinute - minute) < 2;
+      });
+      
+      // 거리 값 시뮬레이션
+      if (isNearEvent) {
+        // 이벤트 근처: 안전거리보다 가까움 (위반)
+        distance = safeDistance * (0.3 + Math.random() * 0.2);
+      } else {
+        // 일반 상황: 안전거리 이상
+        distance = safeDistance * (0.8 + Math.random() * 0.5);
+      }
+      
+      const x = ((minute - startTime) / timeRange) * width;
+      const y = chartHeight - distance;
+      
+      points.push({ x, y, minute, distance });
+    }
+    return points;
+  };
+  
+  const distanceData = generateDistanceData();
+  
+  // SVG 경로 생성
+  const createDistancePath = () => {
+    let path = distanceData.map((point, index) => 
+      (index === 0 ? 'M' : 'L') + point.x + ',' + point.y
+    ).join(' ');
+    
+    // 영역 채우기 위해 경로 닫기
+    path += ` L${width},${chartHeight} L0,${chartHeight} Z`;
+    return path;
+  };
+  
+  const safeDistanceY = chartHeight * 0.4; // 안전 거리 기준선 (위에서부터)
+  
+  return (
+    <View style={[styles.chartSpecialContainer, { height }]}>
+      <Text style={styles.chartTitle}>차간 안전거리 변화</Text>
+      
+      <Svg width={width} height={chartHeight}>
+        {/* 배경 영역: 안전/위험 구분 */}
+        <Rect 
+          x={0} y={0}
+          width={width} height={safeDistanceY}
+          fill="rgba(229, 62, 62, 0.1)" // 위험 영역: 빨간색
+        />
+        <Rect 
+          x={0} y={safeDistanceY}
+          width={width} height={chartHeight - safeDistanceY}
+          fill="rgba(104, 211, 146, 0.1)" // 안전 영역: 녹색
+        />
+        
+        {/* 안전 거리 기준선 */}
+        <Line 
+          x1={0} y1={safeDistanceY}
+          x2={width} y2={safeDistanceY}
+          stroke="#68D392" strokeWidth={2}
+          strokeDasharray="5,5"
+        />
+        <SvgText 
+          x={8} y={safeDistanceY - 5} 
+          fill="#68D392" 
+          fontSize={10}
+        >
+          권장 안전거리
+        </SvgText>
+        
+        {/* 거리 변화 곡선 */}
+        <Path 
+          d={createDistancePath()}
+          fill="rgba(187, 39, 255, 0.2)"
+          stroke={COLORS.chart.purple}
+          strokeWidth={3}
+        />
+        
+        {/* 이벤트 발생 지점 */}
+        {sortedEvents.map((event, index) => {
+          const eventMinute = timeToMinutes(event.time);
+          const x = ((eventMinute - startTime) / timeRange) * width;
+          
+          // 이벤트 발생 지점에서 실제 거리 찾기 (가장 가까운 데이터 포인트)
+          const nearestPoint = distanceData.reduce((nearest, point) => {
+            const currentDiff = Math.abs(point.minute - eventMinute);
+            const nearestDiff = Math.abs(nearest.minute - eventMinute);
+            return currentDiff < nearestDiff ? point : nearest;
+          }, distanceData[0]);
+          
+          return (
+            <G key={`distance-event-${index}`}>
+              <Circle 
+                cx={x} cy={nearestPoint.y} 
+                r={6} 
+                fill={COLORS.chart.red} 
+              />
+              <Line 
+                x1={x} y1={nearestPoint.y}
+                x2={x} y2={chartHeight}
+                stroke={COLORS.chart.red}
+                strokeWidth={1}
+                strokeDasharray="3,3"
+              />
+              <SvgText 
+                x={x} y={chartHeight}
+                fontSize={10}
+                fill={COLORS.text.secondary}
+                textAnchor="middle"
+              >
+                {event.formattedTime}
+              </SvgText>
+            </G>
+          );
+        })}
+        
+        {/* 범례 */}
+        <SvgText x={8} y={15} fontSize={10} fill={COLORS.chart.red}>
+          위험 구간
+        </SvgText>
+        <SvgText x={8} y={chartHeight - 5} fontSize={10} fill={COLORS.chart.green}>
+          안전 구간
+        </SvgText>
+      </Svg>
+      
+      <View style={styles.chartLegend}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: COLORS.chart.purple }]} />
+          <Text style={styles.legendText}>실제 유지 거리</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: COLORS.chart.green }]} />
+          <Text style={styles.legendText}>안전 거리</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const AccidentPreventionReportScreen = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(options[0]);
@@ -491,29 +976,22 @@ const AccidentPreventionReportScreen = () => {
         </Text>
 
         <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>반응 속도 이벤트 타임라인</Text>
-          <View style={styles.chartInnerContainer}>
-            <TimelineChart 
-              events={reactionEvents} 
-              title="반응 속도 이벤트 발생 시점" 
-              height={200}
-            />
+          <ReactionSpeedChart events={reactionEvents} height={200} />
 
-            <View style={styles.eventsListContainer}>
-              <Text style={styles.eventsListTitle}>반응 지연 감지 시간</Text>
-              <View style={styles.eventsList}>
-                {reactionEvents.map((event, index) => (
-                  <View key={index} style={styles.eventItem}>
-                    <Text style={styles.eventIndex}>#{index + 1}</Text>
-                    <Text style={styles.eventTime}>
-                      {event.formattedTime} ~ {event.formattedEndTime}
-                    </Text>
-                    <Text style={styles.eventDuration}>
-                      {event.duration}초
-                    </Text>
-                  </View>
-                ))}
-              </View>
+          <View style={styles.eventsListContainer}>
+            <Text style={styles.eventsListTitle}>반응 지연 감지 시간</Text>
+            <View style={styles.eventsList}>
+              {reactionEvents.map((event, index) => (
+                <View key={index} style={styles.eventItem}>
+                  <Text style={styles.eventIndex}>#{index + 1}</Text>
+                  <Text style={styles.eventTime}>
+                    {event.formattedTime} ~ {event.formattedEndTime}
+                  </Text>
+                  <Text style={styles.eventDuration}>
+                    {event.duration}초
+                  </Text>
+                </View>
+              ))}
             </View>
           </View>
         </View>
@@ -538,34 +1016,27 @@ const AccidentPreventionReportScreen = () => {
         </Text>
 
         <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>차선 이탈 발생 시점</Text>
-          <View style={styles.chartInnerContainer}>
-            <TimelineChart 
-              events={laneDepartureEvents} 
-              title="차선 이탈 발생 시점" 
-              height={200}
-            />
+          <LaneDepartureChart events={laneDepartureEvents} height={200} />
 
-            <View style={styles.eventsListContainer}>
-              <Text style={styles.eventsListTitle}>차선 이탈 시간</Text>
-              <View style={styles.eventsList}>
-                {laneDepartureEvents.map((event, index) => (
-                  <View key={index} style={styles.eventItem}>
-                    <Text style={styles.eventIndex}>#{index + 1}</Text>
-                    <Text style={styles.eventTime}>{event.formattedTime}</Text>
-                    <Icon name="alert-triangle" size={16} color={COLORS.chart.red} />
-                  </View>
-                ))}
-              </View>
+          <View style={styles.eventsListContainer}>
+            <Text style={styles.eventsListTitle}>차선 이탈 시간</Text>
+            <View style={styles.eventsList}>
+              {laneDepartureEvents.map((event, index) => (
+                <View key={index} style={styles.eventItem}>
+                  <Text style={styles.eventIndex}>#{index + 1}</Text>
+                  <Text style={styles.eventTime}>{event.formattedTime}</Text>
+                  <Icon name="alert-triangle" size={16} color={COLORS.chart.red} />
+                </View>
+              ))}
             </View>
-            
-            <View style={styles.infoBox}>
-              <Icon name="info" size={20} color={COLORS.primary} style={styles.infoIcon} />
-              <Text style={styles.infoText}>
-                차선 이탈은 피로 운전, 주의력 산만, 또는 부적절한 스티어링 조작으로 인해 발생할 수 있습니다.
-                정기적인 휴식과 집중력 유지가 중요합니다.
-              </Text>
-            </View>
+          </View>
+          
+          <View style={styles.infoBox}>
+            <Icon name="info" size={20} color={COLORS.primary} style={styles.infoIcon} />
+            <Text style={styles.infoText}>
+              차선 이탈은 피로 운전, 주의력 산만, 또는 부적절한 스티어링 조작으로 인해 발생할 수 있습니다.
+              정기적인 휴식과 집중력 유지가 중요합니다.
+            </Text>
           </View>
         </View>
       </View>
@@ -589,74 +1060,22 @@ const AccidentPreventionReportScreen = () => {
         </Text>
 
         <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>안전거리 위반 이벤트</Text>
-          <View style={styles.chartInnerContainer}>
-            <TimelineChart 
-              events={followingDistanceEvents} 
-              title="안전거리 위반 발생 시점" 
-              height={200}
-            />
+          <SafeDistanceChart events={followingDistanceEvents} height={200} />
 
-            <View style={styles.safetyDistanceContainer}>
-              <Text style={styles.safetyDistanceTitle}>안전거리 가이드</Text>
-              <View style={styles.safetyDistanceGuide}>
-                <Text style={styles.safetyDistanceText}>
-                  차량 속도에 따른 권장 안전거리:
-                </Text>
-                <View style={styles.safetyDistanceRow}>
-                  <Text style={styles.safetyDistanceSpeed}>50km/h</Text>
-                  <View style={styles.safetyDistanceMeter}>
-                    <View 
-                      style={[
-                        styles.safetyDistanceMeterFill, 
-                        { width: '30%', backgroundColor: COLORS.chart.green }
-                      ]} 
-                    />
-                  </View>
-                  <Text style={styles.safetyDistanceValue}>28m</Text>
+          <View style={styles.eventsListContainer}>
+            <Text style={styles.eventsListTitle}>안전거리 위반 감지 시간</Text>
+            <View style={styles.eventsList}>
+              {followingDistanceEvents.map((event, index) => (
+                <View key={index} style={styles.eventItem}>
+                  <Text style={styles.eventIndex}>#{index + 1}</Text>
+                  <Text style={styles.eventTime}>
+                    {event.formattedTime} ~ {event.formattedEndTime}
+                  </Text>
+                  <Text style={styles.eventDuration}>
+                    {event.duration}초
+                  </Text>
                 </View>
-                <View style={styles.safetyDistanceRow}>
-                  <Text style={styles.safetyDistanceSpeed}>80km/h</Text>
-                  <View style={styles.safetyDistanceMeter}>
-                    <View 
-                      style={[
-                        styles.safetyDistanceMeterFill, 
-                        { width: '45%', backgroundColor: COLORS.chart.yellow }
-                      ]} 
-                    />
-                  </View>
-                  <Text style={styles.safetyDistanceValue}>44m</Text>
-                </View>
-                <View style={styles.safetyDistanceRow}>
-                  <Text style={styles.safetyDistanceSpeed}>100km/h</Text>
-                  <View style={styles.safetyDistanceMeter}>
-                    <View 
-                      style={[
-                        styles.safetyDistanceMeterFill, 
-                        { width: '60%', backgroundColor: COLORS.chart.red }
-                      ]} 
-                    />
-                  </View>
-                  <Text style={styles.safetyDistanceValue}>56m</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.eventsListContainer}>
-              <Text style={styles.eventsListTitle}>안전거리 위반 감지 시간</Text>
-              <View style={styles.eventsList}>
-                {followingDistanceEvents.map((event, index) => (
-                  <View key={index} style={styles.eventItem}>
-                    <Text style={styles.eventIndex}>#{index + 1}</Text>
-                    <Text style={styles.eventTime}>
-                      {event.formattedTime} ~ {event.formattedEndTime}
-                    </Text>
-                    <Text style={styles.eventDuration}>
-                      {event.duration}초
-                    </Text>
-                  </View>
-                ))}
-              </View>
+              ))}
             </View>
           </View>
         </View>
@@ -1145,6 +1564,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     fontWeight: '500',
+  },
+  chartSpecialContainer: {
+    width: '100%',
+    marginVertical: 16,
+    padding: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(203, 213, 224, 0.5)',
+    overflow: 'hidden',
+  },
+  chartLegend: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 8,
+    flexWrap: 'wrap',
   },
 });
 
