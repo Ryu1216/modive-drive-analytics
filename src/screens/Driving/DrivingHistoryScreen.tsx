@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  SafeAreaView,
-  StatusBar,
-  Dimensions,
-  Image,
-  TouchableOpacity
-} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Defs, LinearGradient, Stop, Polyline } from 'react-native-svg';
-import CustomHeader from '../../components/CustomHeader';
-
-// 화면 너비 구하기
-const windowWidth = Dimensions.get('window').width;
 
 // 주행 기록 데이터 타입 정의
 interface DriveHistoryItem {
@@ -58,6 +45,14 @@ const formatTime = (startTime: string, endTime: string) => {
   }
   
   return `${startHours}:${startMinutes}~${endHours}:${endMinutes}(${durationText})`;
+};
+
+const colors = {
+  primary: '#4945FF',
+  neutralLight: '#F2F2FF',
+  neutralDark: '#666666',
+  timelineLine: '#D0D0D0',
+  background: '#FFFFFF',
 };
 
 export default function DrivingHistoryScreen() {
@@ -107,10 +102,12 @@ export default function DrivingHistoryScreen() {
           <View style={styles.timelineDot} />
         </View>
         
-        <TouchableOpacity 
+        <Pressable
           style={styles.historyItem}
           onPress={() => handleDriveItemPress(item.driveId)}
-          activeOpacity={0.7}
+          android_ripple={{ color: colors.primary + '20' }}
+          accessibilityRole="button"
+          accessibilityLabel={`주행 ${formatDate(item.date)} 상세 보기`}
         >
           <View style={styles.leftContent}>
             <Text style={styles.dateText}>
@@ -123,7 +120,7 @@ export default function DrivingHistoryScreen() {
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>{item.summaryScore.toFixed(2)}</Text>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };
@@ -134,7 +131,13 @@ export default function DrivingHistoryScreen() {
       
       <View style={[styles.container, /* ensure container unchanged */]}>   
         <Text style={styles.title}>주행 히스토리</Text>
-        <Text style={styles.subtitle}>지금까지의 주행데이터를 확인하세요</Text>
+        <Text style={styles.subtitle}>지금까지의 주행 데이터를 확인해 보세요</Text>
+        
+        {driveHistory.length === 0 && (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>아직 주행 기록이 없어요</Text>
+          </View>
+        )}
         
         <Svg width="100%" height={100} style={{ marginTop: 30, marginBottom: 40 }}>
           <Defs>
@@ -158,11 +161,10 @@ export default function DrivingHistoryScreen() {
           <Text style={styles.listHeaderRight}>주행점수</Text>
         </View>
         
-        <View style={[styles.historyListContainer, { position: 'relative', marginTop: 0 }]
-        }>
-          <View style={styles.fullTimelineLine} />
-          {driveHistory.map((item, index) => renderDriveHistoryItem(item, index))}
-        </View>
+        <View style={[styles.historyListContainer, { position: 'relative', marginTop: 20 }]}>
+           <View style={styles.fullTimelineLine} />
+           {driveHistory.map((item, index) => renderDriveHistoryItem(item, index))}
+         </View>
       </View>
     </SafeAreaView>
   );
@@ -180,16 +182,26 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Pretendard-Bold',
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: 'bold',
-    color: '#4945FF',
-    marginBottom: 4,
+    color: colors.primary,
+    marginBottom: 8,
   },
   subtitle: {
     fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+    color: colors.neutralDark,
+    marginBottom: 20,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 200,
+  },
+  emptyText: {
     fontSize: 16,
-    color: '#000000',
-    marginBottom: 10,
+    color: colors.neutralDark,
   },
   listHeaderContainer: {
     flexDirection: 'row',
@@ -214,20 +226,20 @@ const styles = StyleSheet.create({
   historyItemWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 24,
   },
   timelineContainer: {
     alignItems: 'center',
     width: 30,
-    marginRight: 10,
+    marginRight: 12,
   },
   timelineDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: '#4945FF',
-    borderWidth: 4,
-    borderColor: '#FFFFFF',
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.primary,
+    borderWidth: 3,
+    borderColor: colors.background,
     zIndex: 2,
   },
   fullTimelineLine: {
@@ -236,13 +248,14 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 2,
-    backgroundColor: '#D0D0D0',
+    backgroundColor: colors.timelineLine,
   },
   historyItem: {
     flex: 1,
-    backgroundColor: '#F2F2FF',
+    backgroundColor: colors.neutralLight,
     borderRadius: 20,
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     shadowColor: '#000',
@@ -260,21 +273,23 @@ const styles = StyleSheet.create({
   dateText: {
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 16,
-    color: '#000000',
-    marginBottom: 4,
+    color: colors.neutralDark,
+    lineHeight: 22,
+    marginBottom: 6,
   },
   timeText: {
-    fontFamily: 'Pretendard-SemiBold',
-    fontSize: 16,
-    color: '#000000',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+    color: colors.neutralDark,
   },
   scoreContainer: {
     justifyContent: 'center',
+    paddingLeft: 12,
   },
   scoreText: {
-    fontFamily: 'Pretendard-SemiBold',
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: '600',
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 22,
+    color: colors.primary,
+    fontWeight: '700',
   },
 });

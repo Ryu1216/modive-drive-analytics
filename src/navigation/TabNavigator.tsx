@@ -10,6 +10,7 @@ import FeedbackScreen from '../screens/Dashboard/FeedbackScreen';
 import DrivingScreen from '../screens/Driving/DrivingScreen';
 import DrivingHistoryScreen from '../screens/Driving/DrivingHistoryScreen';
 import DrivingDetailScreen from '../screens/Driving/DrivingDetailScreen';
+import SafetyReportScreen from '../screens/Driving/SafetyReportScreen';
 import SeedsScreen from '../screens/Seeds/SeedsScreen';
 import MypageScreen from '../screens/Mypage/MypageScreen';
 import ScreenLayout from '../components/CommonLayout';
@@ -63,6 +64,13 @@ function DrivingStack() {
           headerShown: false,
           presentation: 'modal',
           animation: 'slide_from_bottom',
+        }}
+      />
+      <Stack.Screen
+        name="SafetyReport"
+        component={SafetyReportScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
