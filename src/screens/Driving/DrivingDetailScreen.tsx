@@ -9,9 +9,9 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import {useNavigation, NavigationProp} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
-import Svg, { Path } from 'react-native-svg';
+import Svg, {Path} from 'react-native-svg';
 
 // 원형 차트를 그리는 컴포넌트
 const CircleChart = ({
@@ -81,7 +81,7 @@ const CircleChart = ({
           strokeLinecap="round"
         />
       </Svg>
-      <Text style={[styles.circleText, { fontSize: radius * 0.5, color }]}>
+      <Text style={[styles.circleText, {fontSize: radius * 0.5, color}]}>
         {Math.round(percentage)}%
       </Text>
     </View>
@@ -105,10 +105,10 @@ const DrivingDetailScreen = () => {
     time: '16:30~17:28까지 주행기록',
     totalScore: 87.12,
     scores: [
-      { name: '탄소 배출 및 연비 점수', value: 68.0, color: '#007AFF' },
-      { name: '안전 운전 점수', value: 82.45, color: '#4ECD7B' },
-      { name: '사고 예방 점수', value: 74.68, color: '#BB27FF' },
-      { name: '주의력 점수', value: 68.0, color: '#FFD927' },
+      {name: '탄소 배출 및 연비 점수', value: 68.0, color: '#007AFF'},
+      {name: '안전 운전 점수', value: 82.45, color: '#4ECD7B'},
+      {name: '사고 예방 점수', value: 74.68, color: '#BB27FF'},
+      {name: '주의력 점수', value: 68.0, color: '#FFD927'},
     ],
     message:
       '전체적으로 안정적인 운전 습관이에요\n특히 급제동과 급가속을 잘 컨트롤했네요!',
@@ -171,7 +171,7 @@ const DrivingDetailScreen = () => {
           {data.scores.map((score, idx) => (
             <TouchableOpacity
               key={idx}
-              style={[styles.circleCard, { backgroundColor: cardBgColors[idx] }]}
+              style={[styles.circleCard, {backgroundColor: cardBgColors[idx]}]}
               activeOpacity={0.7}
               onPress={() => {
                 if (score.name === '안전 운전 점수') {
@@ -187,6 +187,10 @@ const DrivingDetailScreen = () => {
               <Text style={styles.circleLabel} numberOfLines={2}>
                 {score.name}
               </Text>
+              {/* 우측 하단 화살표 추가 */}
+              <View style={styles.arrowContainer}>
+                <Icon name="chevron-right" size={16} color="#888" />
+              </View>
             </TouchableOpacity>
           ))}
         </View>
@@ -300,11 +304,19 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
     marginBottom: 16,
+    position: 'relative', // 추가: 절대위치 기준점 설정
+  },
+  arrowContainer: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    borderRadius: 12,
+    padding: 2,
   },
   circleContainer: {
     justifyContent: 'center',

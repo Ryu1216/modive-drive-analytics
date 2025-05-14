@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(104, 211, 146, 0.3)',
     borderRadius: 16,
-    backgroundColor: '#F 4FCF7', // 이 부분을 '#F4FCF7'로 변경
+    backgroundColor: '#F4FCF7', // 이 부분을 '#F4FCF7'로 변경
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
@@ -852,8 +852,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginHorizontal: 0,
     marginTop: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+    // borderBottomWidth: 1,  // 회색 선 제거
+    // borderBottomColor: '#E5E5E5',  // 회색 선 제거
   },
   tabItem: {
     paddingVertical: 16,
@@ -863,22 +863,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   tabItemActive: {
-    borderBottomWidth: 3,
-    borderBottomColor: '#68D392',
-  },
-  tabText: {
-    fontSize: 16,
-    color: '#444444',
-    fontWeight: '400',
-  },
-  tabTextActive: {
-    fontSize: 16,
-    color: '#68D392',
-    fontWeight: '600',
+    borderBottomWidth: 3,  // 초록색 선 유지
+    borderBottomColor: '#68D392',  // 초록색 선 유지
   },
   contentContainer: {
-    padding: 0,
+    padding: 16,  // 내부 패딩 추가
+    marginTop: 0,  // 상단 마진 제거
+    borderRadius: 16,  // 둥근 모서리 추가
+    marginHorizontal: 0,
+    marginBottom: 16,
     marginTop: 16,
+    borderWidth: 4,  // 테두리 두께 추가
+  borderColor: '#D8F7E3',  // 테두리 색상을 연한 민트색으로 설정
   },
   contentBlock: {
     alignItems: 'center',
