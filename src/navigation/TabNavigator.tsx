@@ -10,6 +10,10 @@ import ReportScreen from '../screens/Dashboard/ReportScreen';
 import DrivingScreen from '../screens/Driving/DrivingScreen';
 import DrivingHistoryScreen from '../screens/Driving/DrivingHistoryScreen';
 import DrivingDetailScreen from '../screens/Driving/DrivingDetailScreen';
+import SafetyReportScreen from '../screens/Driving/SafetyReportScreen';
+import CarbonEmissionReportScreen from '../screens/Driving/CarbonEmissionReportScreen';
+import AccidentPreventionReportScreen from '../screens/Driving/AccidentPreventionReportScreen';
+import AttentionScoreReportScreen from '../screens/Driving/AttentionScoreReportScreen';
 import SeedsScreen from '../screens/Seeds/SeedsScreen';
 import MypageScreen from '../screens/Mypage/MypageScreen';
 import ScreenLayout from '../components/CommonLayout';
@@ -75,6 +79,33 @@ function DrivingStack() {
           headerShown: false,
           presentation: 'modal',
           animation: 'slide_from_bottom',
+        }}      />
+      <Stack.Screen
+        name="SafetyReport"
+        component={SafetyReportScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CarbonEmissionReport"
+        component={CarbonEmissionReportScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AccidentPreventionReport"
+        component={AccidentPreventionReportScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AttentionScoreReport"
+        component={AttentionScoreReportScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
