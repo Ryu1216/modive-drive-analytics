@@ -108,10 +108,10 @@ const DrivingDetailScreen = () => {
     time: '16:30~17:28까지 주행기록',
     totalScore: 87.12,
     scores: [
-      {name: '탄소 배출 및 연비 점수', value: 68.0, color: '#007AFF'},
-      {name: '안전 운전 점수', value: 82.45, color: '#4ECD7B'},
-      {name: '사고 예방 점수', value: 74.68, color: '#BB27FF'},
-      {name: '주의력 점수', value: 68.0, color: '#FFD927'},
+      {name: '탄소 배출 및 연비 점수', value: 82.5, color: '#007AFF'},
+      {name: '안전 운전 점수', value: 51.7, color: '#4ECD7B'},
+      {name: '사고 예방 점수', value: 34.7, color: '#BB27FF'},
+      {name: '주의력 점수', value: 70.0, color: '#FFD927'},
     ],
     message:
       '전체적으로 안정적인 운전 습관이에요\n특히 급제동과 급가속을 잘 컨트롤했네요!',

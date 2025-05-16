@@ -440,10 +440,11 @@ const CarbonEmissionReportScreen = () => {
           {scoreText} 점
         </Text>
         <Text style={styles.contentDesc}>
-          정속 주행 비율: {carbonData.speedMaintain.graph.find(item => item.tag === 'middle')?.ratio || 0}%
+          정속 주행 비율: {carbonData.speedMaintain.graph.find(item => item.tag === 'middle')?.ratio ?? 0}%
         </Text>
 
         <View style={styles.chartContainer}>
+
           <Text style={styles.chartTitle}>속도 유지 비율 분석</Text>
           <View style={styles.chartInnerContainer}>
             <PieChart data={speedMaintainData} {...pieChartConfig} />

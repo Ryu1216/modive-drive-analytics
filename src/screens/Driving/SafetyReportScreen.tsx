@@ -100,17 +100,15 @@ const calculateSpeedLimitPosition = (
   maxValue: number,
   chartHeight: number,
 ): number => {
-  // 속도 값과 차트 높이의 비례식으로 위치 계산
-  // Y축은 0부터 150까지 고정된 범위로 표시 (noOfSections이 6이고, 각 구간이 25km/h)
-  const fixedMaxValue = 150; // 고정된 Y축 최대값
-
-  // 정확한 위치 계산: 차트 높이에 대한 스피드 제한의 상대적 위치
-  // 차트의 위쪽이 0, 아래쪽이 150이므로 반전시키기 위해 (fixedMaxValue - speedLimit)
-  const percentage = (fixedMaxValue - speedLimit) / fixedMaxValue;
-
-  // 계산된 비율에 차트 높이를 곱하여 정확한 픽셀 위치 계산
-  // 차트 내부의 패딩을 고려한 추가 조정 없이 정확한 위치 반환
-  return chartHeight * percentage;
+  // Y축이 0부터 150까지인 차트에서 100km/h의 정확한 위치 계산
+  const dataAreaHeight = chartHeight * 0.83; // 실제 데이터 영역
+  const topPadding = chartHeight * 0.08; // 상단 여백
+  
+  // 정확한 위치 계산 (maxValue에서 speedLimit 위치의 비율)
+  const percentage = (maxValue - speedLimit) / maxValue;
+  
+  // 패딩을 고려한 정확한 위치 반환
+  return topPadding + (dataAreaHeight * percentage);
 };
 
 const GaugeChart = ({percentage, color, size = 180}: GaugeChartProps) => {
@@ -263,7 +261,7 @@ const SafetyReportScreen = () => {
     acceleration: {
       score: 40.0,
       ratio: 60.0,
-      feedback: '임시 피드백입니다',
+      feedback: '급가속과 급감속이 다소 많이 발생했습니다. 부드러운 가속과 감속을 통해 안전 운전을 연습해보세요. 특히 08:20과 08:40 시간대에 급가감속이 집중적으로 발생했습니다.',
       title: '주행 시간별 급가감속 발생',
       chartData: [
         {value: 30, label: '08:10', flag: false, time: '2025-04-25T08:10:00Z'},
@@ -279,7 +277,7 @@ const SafetyReportScreen = () => {
       ratio: 40.0,
       safeRatio: 60.0,
       dangerousRatio: 40.0,
-      feedback: '임시 피드백입니다',
+      feedback: '회전 시 안전 비율이 60%로 양호한 편입니다. 하지만 40%의 위험 회전 비율을 개선하면 더욱 안전한 운전이 가능합니다. 회전 시 속도를 줄이고 방향지시등을 미리 켜는 습관을 들이세요.',
       title: '내 회전 스타일 분석',
       chartData: [
         {
@@ -304,7 +302,7 @@ const SafetyReportScreen = () => {
       // overSpeed에 매핑
       score: 55.0,
       violations: 3,
-      feedback: '임시 피드백입니다',
+      feedback: '100km/h 제한속도를 3회 초과했습니다. 특히 기간 1, 3, 6에서 속도 위반이 발생했습니다. 제한속도 준수는 안전 운전의 기본입니다. 긴 직선 도로에서도 속도계를 주시하며 운전하세요.',
       title: '시간대별 속도 그래프',
       speedLimit: 100,
       chartData: [
@@ -487,14 +485,17 @@ const SafetyReportScreen = () => {
     const pieChartConfig = {
       donut: true,
       showText: true,
-      textSize: 16,
+      textSize: 14,
       textColor: 'white',
-      textBackgroundColor: 'rgba(0,0,0,0.4)',
-      showTextBackground: true,
-      textBackgroundRadius: 16,
+      textBackgroundColor: 'transparent', // 배경색 투명하게 변경
+      showTextBackground: false, // 텍스트 배경 비활성화
       radius: chartConfig.pieRadius,
       innerRadius: chartConfig.pieInnerRadius,
-      centerLabelComponent: PieCenterLabel,
+      centerLabelComponent: () => ( // 중앙 라벨 컴포넌트 직접 정의
+        <View style={styles.pieCenterLabelContainer}>
+          <Text style={styles.pieCenterLabel}>회전 비율</Text>
+        </View>
+      ),
       focusOnPress: true,
       toggleFocusOnPress: true,
       isAnimated: true,
@@ -511,7 +512,12 @@ const SafetyReportScreen = () => {
         <View style={styles.chartContainer}>
           <Text style={styles.chartTitle}>{safetyData.turning.title}</Text>
           <View style={styles.chartInnerContainer}>
-            <PieChart data={pieData} {...pieChartConfig} />
+            <PieChart 
+              data={pieData} 
+              {...pieChartConfig} 
+              showGradient={false}
+              gradientCenterColor={'transparent'}
+            />
 
             <View style={styles.legendContainer}>
               {pieData.map((item, index) => (
@@ -1106,6 +1112,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.9)',
     borderRadius: 50,
     padding: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   pieCenterEmoji: {
     fontSize: 28,
