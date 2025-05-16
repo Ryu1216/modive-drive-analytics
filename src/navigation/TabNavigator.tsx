@@ -152,7 +152,8 @@ function MypageStack() {
 }
 
 export default function TabNavigator() {
-  return (
+
+    return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
