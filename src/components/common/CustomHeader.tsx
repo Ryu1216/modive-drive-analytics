@@ -44,7 +44,7 @@ function CustomHeader({
     if (rightType === 'edit') {
       return (
         <TouchableOpacity onPress={() => console.log('편집')}>
-          <Text>편집</Text>
+          <Text style={styles.editText}>편집</Text>
         </TouchableOpacity>
       );
     }
@@ -63,16 +63,19 @@ function CustomHeader({
 const styles = StyleSheet.create({
   container: {
     height: 56,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#fff',
-    borderBottomWidth: 1,
     borderColor: '#eee',
   },
   title: {
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  editText: {
+    color: '#3B5BFF',
     fontWeight: 'bold',
   },
 });

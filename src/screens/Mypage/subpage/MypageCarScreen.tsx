@@ -1,73 +1,64 @@
-import {Button, Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
+import {
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import CustomModal from '../../../components/common/CustomModal';
 
-export default function MypageCarScreen({navigation}) {
-
+export default function MypageCarScreen() {
   const [selected, setSelected] = useState(0);
   const [visible, setVisible] = useState(false);
 
   const cars = [
-    { index:0, number: '04히 2025' },
-    { index:1, number: '04히 1234' },
-    { index:2, number: '04히 5678' },
-  ]
+    {index: 0, number: '04히 2025'},
+    {index: 1, number: '04히 1234'},
+    {index: 2, number: '04히 5678'},
+  ];
+
+  const handleConfirm = () => {
+    // 차량 변경 api
+  };
 
   const carList = () => {
-    return cars.map(({ index, number }) => (
+    return cars.map(({index, number}) => (
       <View key={index}>
-        <TouchableOpacity
-        onPress={() => setVisible(true)}
-        >
-          {(selected === index) ? <View style={styles.selectedBlock}>
-            <Text style={styles.number}>{number}</Text>
-            <Text style={styles.selectedText}>현재 차량</Text>
-          </View> :
-          <View style={styles.carContainer}>
-            <Text style={styles.number}>{number}</Text>
-          </View>}
-        </TouchableOpacity>
-        <Modal
-          animationType="slide" // 'none' | 'slide' | 'fade'
-          transparent={true} // 배경 투명 여부
-          visible={visible}
-          onRequestClose={() => setVisible(false)} // Android back 버튼용
-        >ㅗ
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>이 차량으로 등록할까요?</Text>
-              <Text style={styles.modalNum}>{number}</Text>
-              <Text style={styles.modalText}>선택한 차량으로 설정돼요.</Text>
-              <Text style={styles.modalText}>나중에 언제든 바꿀 수 있어요.</Text>
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={() => setVisible(false)} >
-                  <Text style={styles.modalButtonText}>삭제하기</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={() => setVisible(false)} >
-                  <Text style={styles.modalButtonText}>차량 선택</Text>
-                </TouchableOpacity>
-              </View>
+        <TouchableOpacity onPress={() => setVisible(true)}>
+          {selected === index ? (
+            <View style={styles.selectedBlock}>
+              <Text style={styles.number}>{number}</Text>
+              <Text style={styles.selectedText}>현재 차량</Text>
             </View>
-          </View>
-        </Modal>
+          ) : (
+            <View style={styles.carContainer}>
+              <Text style={styles.number}>{number}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
     ));
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.editContainer}/>
-      {carList()}
-      <TouchableOpacity
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>+  차량 추가</Text>
-      </TouchableOpacity>
-    </View>
-  )
+    <>
+      <View style={styles.container}>
+        {carList()}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>+ 차량 추가</Text>
+        </TouchableOpacity>
+      </View>
+      <CustomModal
+        visible={visible}
+        title="이 차량으로 등록할까요?"
+        content={['선택한 차량으로 설정돼요.', '나중에 언제든 바꿀 수 있어요.']}
+        onClose={() => setVisible(false)}
+        onConfirm={handleConfirm}
+      />
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -75,57 +66,44 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-  editContainer: {
-    width:320,
-    marginTop: 50,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    padding: 20,
   },
   editButton: {
     fontSize: 18,
     fontWeight: 'semibold',
   },
   carContainer: {
-    width: 320,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    width: '100%',
     marginTop: 25,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#F2F2FF',
     borderRadius: 10,
-    padding: 24,
+    padding: 23,
   },
   number: {
     fontSize: 20,
   },
   selectedBlock: {
-    width: 320,
-    display: 'flex',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 25,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#3B82F6',
     borderRadius: 10,
-    padding: 24,
+    padding: 23,
   },
   selectedText: {
     fontSize: 16,
     color: '#3B82F6',
   },
   button: {
-    width: 320,
-    height: 56,
+    width: '100%',
     marginTop: 40,
     backgroundColor: '#3B5BFF',
     borderRadius: 10,
-    paddingVertical: 16,
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -177,5 +155,5 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     color: '#378CFF',
-  }
-})
+  },
+});

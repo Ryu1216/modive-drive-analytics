@@ -79,7 +79,8 @@ function DrivingStack() {
           headerShown: false,
           presentation: 'modal',
           animation: 'slide_from_bottom',
-        }}      />
+        }}
+      />
       <Stack.Screen
         name="SafetyReport"
         component={SafetyReportScreen}
@@ -139,52 +140,32 @@ function MypageStack() {
       <Stack.Screen
         name="mypage_car"
         component={MypageCarScreen}
-        options={({ navigation }) => ({
-          headerTitle: '내 차 정보',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
-              <Image
-                source={require('../../assets/prior_button.png')}
-                style={styles.backArrowIcon} />
-            </TouchableOpacity>
+        options={{
+          header: () => (
+            <CustomHeader leftType="back" rightType="edit" title="내 차 정보" />
           ),
-        })}
+        }}
       />
       <Stack.Screen
         name="mypage_info"
         component={MypageInfoScreen}
-        options={({ navigation }) => ({
-          headerTitle: '내 정보',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
-              <Image
-                source={require('../../assets/prior_button.png')}
-                style={styles.backArrowIcon} />
-            </TouchableOpacity>
-          ),
-        })}
+        options={{
+          header: () => <CustomHeader leftType="back" title="내 정보" />,
+        }}
       />
       <Stack.Screen
         name="mypage_interest"
         component={MypageInterestScreen}
-        options={({ navigation }) => ({
-          headerTitle: '내 관심사',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
-              <Image
-                source={require('../../assets/prior_button.png')}
-                style={styles.backArrowIcon} />
-            </TouchableOpacity>
-          ),
-        })}
+        options={{
+          header: () => <CustomHeader leftType="back" title="내 관심사" />,
+        }}
       />
     </Stack.Navigator>
   );
 }
 
 export default function TabNavigator() {
-
-    return (
+  return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
@@ -244,11 +225,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    width:100,
+    width: 100,
   },
   backArrowIcon: {
     width: 24,
     height: 24,
   },
-
-})
+});
