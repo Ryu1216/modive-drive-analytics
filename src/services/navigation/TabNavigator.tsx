@@ -5,23 +5,23 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import DashboardScreen from '../screens/Dashboard/DashboardScreen';
-import ReportScreen from '../screens/Dashboard/ReportScreen';
-import DrivingScreen from '../screens/Driving/DrivingScreen';
-import DrivingHistoryScreen from '../screens/Driving/DrivingHistoryScreen';
-import DrivingDetailScreen from '../screens/Driving/DrivingDetailScreen';
-import SafetyReportScreen from '../screens/Driving/SafetyReportScreen';
-import CarbonEmissionReportScreen from '../screens/Driving/CarbonEmissionReportScreen';
-import AccidentPreventionReportScreen from '../screens/Driving/AccidentPreventionReportScreen';
-import AttentionScoreReportScreen from '../screens/Driving/AttentionScoreReportScreen';
-import SeedsScreen from '../screens/Seeds/SeedsScreen';
-import MypageScreen from '../screens/Mypage/MypageScreen';
-import ScreenLayout from '../components/CommonLayout';
-import CustomHeader from '../components/CustomHeader';
-import MypageInterestScreen from '../screens/Mypage/subpage/MypageInterestScreen.tsx';
+import DashboardScreen from '../../screens/Dashboard/DashboardScreen.tsx';
+import ReportScreen from '../../screens/Dashboard/ReportScreen.tsx';
+import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
+import DrivingHistoryScreen from '../../screens/Driving/DrivingHistoryScreen.tsx';
+import DrivingDetailScreen from '../../screens/Driving/DrivingDetailScreen.tsx';
+import SafetyReportScreen from '../../screens/Driving/SafetyReportScreen.tsx';
+import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionReportScreen.tsx';
+import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
+import AttentionScoreReportScreen from '../../screens/Driving/AttentionScoreReportScreen.tsx';
+import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
+import MypageScreen from '../../screens/Mypage/MypageScreen.tsx';
+import ScreenLayout from '../../components/common/CommonLayout.tsx';
+import CustomHeader from '../../components/common/CustomHeader.tsx';
+import MypageInterestScreen from '../../screens/Mypage/subpage/MypageInterestScreen.tsx';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
-import MypageCarScreen from '../screens/Mypage/subpage/MypageCarScreen.tsx';
-import MypageInfoScreen from '../screens/Mypage/subpage/MypageInfoScreen.tsx';
+import MypageCarScreen from '../../screens/Mypage/subpage/MypageCarScreen.tsx';
+import MypageInfoScreen from '../../screens/Mypage/subpage/MypageInfoScreen.tsx';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -144,7 +144,7 @@ function MypageStack() {
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
               <Image
-                source={require('../assets/prior_button.png')}
+                source={require('../../assets/prior_button.png')}
                 style={styles.backArrowIcon} />
             </TouchableOpacity>
           ),
@@ -158,7 +158,7 @@ function MypageStack() {
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
               <Image
-                source={require('../assets/prior_button.png')}
+                source={require('../../assets/prior_button.png')}
                 style={styles.backArrowIcon} />
             </TouchableOpacity>
           ),
@@ -172,7 +172,7 @@ function MypageStack() {
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
               <Image
-                source={require('../assets/prior_button.png')}
+                source={require('../../assets/prior_button.png')}
                 style={styles.backArrowIcon} />
             </TouchableOpacity>
           ),
