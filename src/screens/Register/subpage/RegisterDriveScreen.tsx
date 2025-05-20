@@ -1,16 +1,20 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import React, {Dispatch, SetStateAction, useState} from 'react';
+import {View} from 'react-native';
+import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
+import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
+import {RegisterDropdown} from '../../../components/Register/RegisterDropdown.tsx';
+import {ItemType} from 'react-native-dropdown-picker';
 
-type Props = {
+type DriveProps = {
   value: string;
-  setValues: (text: string) => void;
+  setValues: Dispatch<SetStateAction<string>>;
   moveNext: () => void;
 };
 
-export default function RegisterDriveScreen({ value, setValues, moveNext }: Props) {
+export default function RegisterDriveScreen({ value, setValues, moveNext }: DriveProps) {
+
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState([
+  const [items, setItems] = useState<ItemType<string>[]>([
     { label: '1년 미만',  value: '0' },
     { label: '1년 이상',  value: '1' },
     { label: '2년 이상',  value: '2' },
@@ -26,72 +30,19 @@ export default function RegisterDriveScreen({ value, setValues, moveNext }: Prop
 
   return (
     <View>
-      <Text style={styles.title}>운전 경력을 선택해주세요.</Text>
-      <Text style={styles.content}>선택하신 운전 경력에 맞는 피드백을 제공해드릴게요.</Text>
-
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValues}
-        setItems={setItems}
-        placeholder="선택"
-        style={styles.dropdown}
-        dropDownContainerStyle={styles.dropdownContainer}
+      <RegisterHeader
+        title={'운전 경력을 선택해주세요.'}
+        content={'선택하신 운전 경력에 맞는 피드백을 제공해드릴게요.'}
       />
-      <Text style={styles.charCount}/>
-      <TouchableOpacity
-        style={styles.nextButton}
-        onPress={moveNext}>
-        <Text style={styles.nextButtonText}>다음</Text>
-      </TouchableOpacity>
+      <RegisterDropdown
+        open={open}
+        setOpen={setOpen}
+        items={items}
+        setItems={setItems}
+        value={value}
+        setValues={setValues}
+      />
+      <RegisterButton title={'다음'} moveNext={moveNext} />
     </View>
   );
 }
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#565656',
-  },
-  content: {
-    fontSize: 14,
-    color: '#565656',
-    opacity: 0.7,
-    marginTop: 2,
-  },
-  dropdown: {
-    marginTop: 20,
-    borderColor: '#D9D9D9',
-    width: 320,
-    height: 56,
-  },
-  dropdownContainer: {
-    borderColor: '#D9D9D9',
-    marginTop: 20,
-    width: 320,
-    height: 200,
-  },
-  charCount: {
-    alignSelf: 'flex-end',
-    fontSize: 16,
-    color: '#C7C7CD',
-    marginTop: 10,
-  },
-  nextButton: {
-    width: 320,
-    height: 56,
-    marginTop: 40,
-    backgroundColor: '#3B5BFF',
-    borderRadius: 10,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  nextButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-})

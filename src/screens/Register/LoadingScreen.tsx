@@ -17,23 +17,20 @@ export default function LoadingScreen() {
 }
 
 const styles = StyleSheet.create({
-
     image: {
         marginTop: 277,
         marginLeft: 36,
         width: 243,
         resizeMode: 'contain',
     },
-
     textContainer: {
       marginTop: 50,
     },
-
     text: {
         marginTop: 5,
         marginLeft: 36,
         fontSize: 16,
         fontWeight: 'semibold',
         color: '#565656',
-    }
-})
+    },
+});
