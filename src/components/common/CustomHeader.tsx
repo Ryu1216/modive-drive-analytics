@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
-import Logo from '../assets/modive_logo.svg';
+import Logo from '../../assets/modive_logo.svg';
 
 type Props = {
   leftType?: 'back' | 'logo' | 'none';

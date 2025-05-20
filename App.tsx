@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import AppNavigator from './src/navigation/AppNavigator';
+import AppNavigator from './src/services/navigation/AppNavigator';
 import {PermissionsAndroid, Platform} from "react-native";
 import messaging from '@react-native-firebase/messaging';
 import notifee, {AndroidImportance} from '@notifee/react-native';
-import { nanoid } from 'nanoid';
 
 function App(): React.JSX.Element {
 
@@ -69,45 +68,45 @@ function App(): React.JSX.Element {
         });
     }
 
-    useEffect(() => {
-         const requestAndroidNotificationPermission = async () => {
-           if (Platform.OS === 'android' && Platform.Version >= 33) {
-             const granted = await PermissionsAndroid.request(
-               PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-             );
-             console.log('알림 권한 상태:', granted);
-           }
-         };
-         requestAndroidNotificationPermission();
-
-         const requestPermissionAndGetToken = async () => {
-           const authStatus = await messaging().requestPermission();
-           const enabled =
-             authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-             authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-           console.log('Permission status:', enabled);
-           if (enabled) {
-             const token = await messaging().getToken();
-             console.log(token);
-           }
-         };
-
-         requestPermissionAndGetToken();
-         requestAndroidNotificationPermission();
-
-         messaging().setBackgroundMessageHandler(async remoteMessage => {
-                 await showLocalNotification(remoteMessage);
-             });
-         messaging().onMessage(async remoteMessage => {
-             await showLocalNotification(remoteMessage);
-         });
-
-        createCrashChannel();
-        createIdleChannel();
-        createLineoutChannel();
-        createOverspeedChannel();
-       }, []);
+    // useEffect(() => {
+    //      const requestAndroidNotificationPermission = async () => {
+    //        if (Platform.OS === 'android' && Platform.Version >= 33) {
+    //          const granted = await PermissionsAndroid.request(
+    //            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+    //          );
+    //          console.log('알림 권한 상태:', granted);
+    //        }
+    //      };
+    //      requestAndroidNotificationPermission();
+    //
+    //      const requestPermissionAndGetToken = async () => {
+    //        const authStatus = await messaging().requestPermission();
+    //        const enabled =
+    //          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    //          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    //
+    //        console.log('Permission status:', enabled);
+    //        if (enabled) {
+    //          const token = await messaging().getToken();
+    //          console.log(token);
+    //        }
+    //      };
+    //
+    //      requestPermissionAndGetToken();
+    //      requestAndroidNotificationPermission();
+    //
+    //      messaging().setBackgroundMessageHandler(async remoteMessage => {
+    //              await showLocalNotification(remoteMessage);
+    //          });
+    //      messaging().onMessage(async remoteMessage => {
+    //          await showLocalNotification(remoteMessage);
+    //      });
+    //
+    //     createCrashChannel();
+    //     createIdleChannel();
+    //     createLineoutChannel();
+    //     createOverspeedChannel();
+    //    }, []);
 
   return (
     <SafeAreaProvider>
