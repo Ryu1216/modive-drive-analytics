@@ -85,6 +85,8 @@ export const RegisterScreen = ({
 const styles = StyleSheet.create({
     flexView: {
       flex: 1,
+      width: '100%',
+      height: '100%',
     },
     pagerView: {
         flex: 1,

@@ -16,12 +16,11 @@ export const RegisterButton = ({title, moveNext}:ButtonProps) => {
 
 const styles = StyleSheet.create({
   nextButton: {
-    width: 300,
-    height: 56,
+    width: '100%',
     marginTop: 40,
     backgroundColor: '#3B5BFF',
     borderRadius: 10,
-    paddingVertical: 16,
+    paddingVertical: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },

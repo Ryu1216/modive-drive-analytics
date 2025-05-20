@@ -1,6 +1,6 @@
 import DropDownPicker, {ItemType} from 'react-native-dropdown-picker';
 import React, {Dispatch, SetStateAction} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 type DropdownProps = {
   open: boolean;
@@ -13,17 +13,20 @@ type DropdownProps = {
 
 export const RegisterDropdown = ( { open, setOpen, items, setItems, value, setValues} : DropdownProps ) => {
   return (
-    <DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValues}
-      setItems={setItems}
-      placeholder="선택"
-      style={styles.dropdown}
-      dropDownContainerStyle={styles.dropdownContainer}
-    />
+    <View>
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValues}
+        setItems={setItems}
+        placeholder="선택"
+        style={styles.dropdown}
+        dropDownContainerStyle={styles.dropdownContainer}
+      />
+      <View style={styles.charCount}/>
+    </View>
   );
 };
 
@@ -31,8 +34,13 @@ const styles = StyleSheet.create({
   dropdown: {
     marginTop: 20,
     borderColor: '#D9D9D9',
-    width: 320,
-    height: 56,
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+    fontSize: 24,
+    color: '#000',
   },
   dropdownContainer: {
     borderColor: '#D9D9D9',

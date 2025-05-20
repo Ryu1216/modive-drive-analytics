@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
 import {RegisterInput} from '../../../components/Register/RegisterInput.tsx';
 import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
@@ -12,7 +12,7 @@ type Props = {
 
 export default function RegisgerCarNumScreen({ text, setText, moveNext }: Props) {
   return (
-    <View>
+    <View style={styles.page}>
       <RegisterHeader
         title={'차량 번호를 입력해주세요.'}
         content={'차량 정보를 바탕으로 주행 데이터를 분석해드릴게요.'}
@@ -29,3 +29,10 @@ export default function RegisgerCarNumScreen({ text, setText, moveNext }: Props)
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  page: {
+    width: '100%',
+    paddingHorizontal: 40,
+  },
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
 import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
 import {RegisterCategory} from '../../../components/Register/RegisterCategory.tsx';
@@ -19,7 +19,7 @@ const categories = [
 
 export default function RegisterInterestScreen({ value, setValue, register }: InterestProps) {
   return (
-    <View>
+    <View style={styles.page}>
       <RegisterHeader
         title={'관심 있는 항목을 선택해주세요.'}
         content={'선택한 관심사를 중심으로 리포트를 구성해드릴게요.'}
@@ -37,3 +37,10 @@ export default function RegisterInterestScreen({ value, setValue, register }: In
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  page: {
+    width: '100%',
+    paddingHorizontal: 40,
+  },
+});

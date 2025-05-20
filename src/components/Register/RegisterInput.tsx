@@ -34,12 +34,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   textInput: {
-    height: 56,
+    width: '100%',
     borderWidth: 1,
     borderColor: '#D1D1D6',
     borderRadius: 10,
     paddingHorizontal: 16,
-    fontSize: 16,
+    paddingVertical: 16,
+    fontSize: 24,
     color: '#000',
   },
   charCount: {

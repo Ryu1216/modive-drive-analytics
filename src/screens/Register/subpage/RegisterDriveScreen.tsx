@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
 import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
 import {RegisterDropdown} from '../../../components/Register/RegisterDropdown.tsx';
@@ -29,7 +29,7 @@ export default function RegisterDriveScreen({ value, setValues, moveNext }: Driv
   ]);
 
   return (
-    <View>
+    <View style={styles.page}>
       <RegisterHeader
         title={'운전 경력을 선택해주세요.'}
         content={'선택하신 운전 경력에 맞는 피드백을 제공해드릴게요.'}
@@ -46,3 +46,10 @@ export default function RegisterDriveScreen({ value, setValues, moveNext }: Driv
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  page: {
+    width: '100%',
+    paddingHorizontal: 40,
+  },
+});

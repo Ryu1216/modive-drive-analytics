@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
 import {RegisterInput} from '../../../components/Register/RegisterInput.tsx';
 import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
@@ -12,7 +12,7 @@ type NicknameProps = {
 
 export default function RegisterNicknameView({ text, setText, moveNext }: NicknameProps) {
   return (
-    <View>
+    <View style={styles.page}>
       <RegisterHeader
         title={'닉네임을 입력해주세요.'}
         content={'모디브에서 사용할 이름이에요.'}
@@ -32,4 +32,9 @@ export default function RegisterNicknameView({ text, setText, moveNext }: Nickna
   );
 }
 
-
+const styles = StyleSheet.create({
+  page: {
+    width: '100%',
+    paddingHorizontal: 40,
+  },
+});
