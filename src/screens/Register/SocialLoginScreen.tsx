@@ -23,18 +23,15 @@ export default function SocialLoginScreen() {
 }
 
 const styles = StyleSheet.create({
-
     image: {
         marginTop: 277,
         marginLeft: 36,
         width: 243,
         resizeMode: 'contain',
     },
-
     textContainer: {
         marginTop: 50,
     },
-
     text: {
         marginTop: 5,
         marginLeft: 36,
@@ -42,11 +39,10 @@ const styles = StyleSheet.create({
         fontWeight: 'semibold',
         color: '#565656',
     },
-
     kakaoButton: {
         margin:'auto',
         marginTop: 5,
         width: 330,
         resizeMode: 'contain',
-    }
-})
+    },
+});

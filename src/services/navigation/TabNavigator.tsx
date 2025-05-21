@@ -15,13 +15,13 @@ import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionRepo
 import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
 import AttentionScoreReportScreen from '../../screens/Driving/AttentionScoreReportScreen.tsx';
 import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
-import MypageScreen from '../../screens/Mypage/MypageScreen.tsx';
 import ScreenLayout from '../../components/common/CommonLayout.tsx';
 import CustomHeader from '../../components/common/CustomHeader.tsx';
-import MypageInterestScreen from '../../screens/Mypage/subpage/MypageInterestScreen.tsx';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
-import MypageCarScreen from '../../screens/Mypage/subpage/MypageCarScreen.tsx';
-import MypageInfoScreen from '../../screens/Mypage/subpage/MypageInfoScreen.tsx';
+import {MypageContainer} from '../../containers/Mypage/MypageContainer.tsx';
+import {MypageCarContainer} from '../../containers/Mypage/MypageCarContainer.tsx';
+import {MypageInfoContainer} from '../../containers/Mypage/MypageInfoContainer.tsx';
+import {MypageInterestContainer} from '../../containers/Mypage/MypageInterestContainer.tsx';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -79,7 +79,8 @@ function DrivingStack() {
           headerShown: false,
           presentation: 'modal',
           animation: 'slide_from_bottom',
-        }}      />
+        }}
+      />
       <Stack.Screen
         name="SafetyReport"
         component={SafetyReportScreen}
@@ -131,60 +132,40 @@ function MypageStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Mypage"
-        component={MypageScreen}
+        component={MypageContainer}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
       />
       <Stack.Screen
-        name="mypage_car"
-        component={MypageCarScreen}
-        options={({ navigation }) => ({
-          headerTitle: '내 차 정보',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
-              <Image
-                source={require('../../assets/prior_button.png')}
-                style={styles.backArrowIcon} />
-            </TouchableOpacity>
+        name="MypageCar"
+        component={MypageCarContainer}
+        options={{
+          header: () => (
+            <CustomHeader leftType="back" rightType="edit" title="내 차 정보" />
           ),
-        })}
+        }}
       />
       <Stack.Screen
-        name="mypage_info"
-        component={MypageInfoScreen}
-        options={({ navigation }) => ({
-          headerTitle: '내 정보',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
-              <Image
-                source={require('../../assets/prior_button.png')}
-                style={styles.backArrowIcon} />
-            </TouchableOpacity>
-          ),
-        })}
+        name="MypageInfo"
+        component={MypageInfoContainer}
+        options={{
+          header: () => <CustomHeader leftType="back" title="내 정보" />,
+        }}
       />
       <Stack.Screen
-        name="mypage_interest"
-        component={MypageInterestScreen}
-        options={({ navigation }) => ({
-          headerTitle: '내 관심사',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backArrow}>
-              <Image
-                source={require('../../assets/prior_button.png')}
-                style={styles.backArrowIcon} />
-            </TouchableOpacity>
-          ),
-        })}
+        name="MypageInterest"
+        component={MypageInterestContainer}
+        options={{
+          header: () => <CustomHeader leftType="back" title="내 관심사" />,
+        }}
       />
     </Stack.Navigator>
   );
 }
 
 export default function TabNavigator() {
-
-    return (
+  return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
@@ -244,11 +225,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    width:100,
+    width: 100,
   },
   backArrowIcon: {
     width: 24,
     height: 24,
   },
-
-})
+});

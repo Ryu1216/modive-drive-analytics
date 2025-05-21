@@ -4,6 +4,8 @@ import AppNavigator from './src/services/navigation/AppNavigator';
 import {PermissionsAndroid, Platform} from "react-native";
 import messaging from '@react-native-firebase/messaging';
 import notifee, {AndroidImportance} from '@notifee/react-native';
+import {RegisterContainer} from './src/containers/Register/RegisterContainer.tsx';
+
 
 function App(): React.JSX.Element {
 
