@@ -11,9 +11,10 @@ import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
 import DrivingHistoryContainer from '../../containers/Driving/DrivingHistoryContainer';
 import DrivingDetailContainer from '../../containers/Driving/DrivingDetailContainer';
 import SafetyReportScreen from '../../screens/Driving/SafetyReportScreen.tsx';
-import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionReportScreen.tsx';
-import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
-import AttentionScoreReportScreen from '../../screens/Driving/AttentionScoreReportScreen.tsx';
+import CarbonEmissionReportContainer from '../../containers/Driving/CarbonEmissionReportContainer';
+import SafetyReportContainer from '../../containers/Driving/SafetyReportContainer';
+import AccidentPreventionReportContainer from '../../containers/Driving/AccidentPreventionReportContainer';
+import AttentionScoreReportContainer from '../../containers/Driving/AttentionScoreReportContainer';
 import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
 import ScreenLayout from '../../components/common/CommonLayout.tsx';
 import CustomHeader from '../../components/common/CustomHeader.tsx';
@@ -82,29 +83,29 @@ function DrivingStack() {
         }}
       />
       <Stack.Screen
-        name="SafetyReport"
-        component={SafetyReportScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+  name="SafetyReport"
+  component={SafetyReportContainer}
+  options={{
+    headerShown: false,
+  }}
+/>
       <Stack.Screen
         name="CarbonEmissionReport"
-        component={CarbonEmissionReportScreen}
+        component={CarbonEmissionReportContainer}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="AccidentPreventionReport"
-        component={AccidentPreventionReportScreen}
+        component={AccidentPreventionReportContainer}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="AttentionScoreReport"
-        component={AttentionScoreReportScreen}
+        component={AttentionScoreReportContainer}
         options={{
           headerShown: false,
         }}

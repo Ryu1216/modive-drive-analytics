@@ -31,3 +31,43 @@ export type DrivingStackParamList = {
   AccidentPreventionReport: undefined;
   AttentionScoreReport: undefined;
 };
+
+// 이벤트 시간 타입
+export interface TimeEvent {
+  id: string;
+  time: string;
+  formattedTime: string;
+}
+
+// 이벤트 시간 범위 타입
+export interface TimeRangeEvent extends TimeEvent {
+  endTime: string;
+  formattedEndTime: string;
+  duration: number;
+}
+
+// 사고 예방 리포트 관련 타입
+export interface AccidentPreventionData {
+  score: number;
+  reaction: {
+    score: number;
+    feedback: string;
+    graph: Array<{
+      startTime: string;
+      endTime: string;
+    }>;
+  };
+  laneDeparture: {
+    score: number;
+    feedback: string;
+    graph: string[];
+  };
+  followingDistance: {
+    score: number;
+    feedback: string;
+    graph: Array<{
+      startTime: string;
+      endTime: string;
+    }>;
+  };
+}

@@ -1,4 +1,4 @@
-import React, {useState, JSX} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,10 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
-import Svg, {Path, Circle, G, Text as SvgText} from 'react-native-svg';
-import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
-import HeaderDropdown from '../../components/common/HeaderDropdown';
+import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
+import ReportHeaderSection from '../../components/Driving/ReportHeaderSection';
+import { SafetyReportScreenProps } from '../../types/report';
 
 // 색상 시스템 정의
 const COLORS = {
@@ -61,20 +60,9 @@ const chartConfig = {
   gaugeSize: screenWidth * 0.6 > 240 ? 240 : screenWidth * 0.6,
   barWidth: screenWidth * 0.08 > 30 ? 30 : screenWidth * 0.08,
   barSpacing: screenWidth * 0.05 > 24 ? 24 : screenWidth * 0.05,
-  // 라인 차트 가로 폭을 패딩을 고려해서 조정
   lineChartWidth: screenWidth - 100 > 0 ? screenWidth - 100 : 300,
-  // 충분한 높이 확보
   lineChartHeight: Math.max(screenHeight * 0.28, 200),
 };
-
-// Fixed Korean text
-const options = ['급가감속', '급회전', '과속'];
-
-interface GaugeChartProps {
-  percentage: number;
-  color: string;
-  size?: number;
-}
 
 // Chart component definitions for reuse
 const AccelerationDataPoint = ({value}: {value: number}) => (
@@ -111,299 +99,20 @@ const calculateSpeedLimitPosition = (
   return topPadding + (dataAreaHeight * percentage);
 };
 
-const GaugeChart = ({percentage, color, size = 180}: GaugeChartProps) => {
-  const center = size / 2;
-  const gaugeRadius = (size / 2) * 0.8;
-  const strokeWidth = 20; // 두께 증가
-
-  // 게이지 각도 계산 - 반원형 차트 (180도)
-  const gaugeStartAngle = -180;
-  const gaugeEndAngle = gaugeStartAngle + (percentage / 100) * 180;
-
-  // 극좌표를 데카르트 좌표로 변환
-  const polarToCartesian = (
-    centerX: number,
-    centerY: number,
-    r: number,
-    angleDegrees: number,
-  ) => {
-    const angleRad = (angleDegrees * Math.PI) / 180.0;
-    return {
-      x: centerX + r * Math.cos(angleRad),
-      y: centerY + r * Math.sin(angleRad),
-    };
-  };
-
-  // 호 경로 생성
-  const createArc = (
-    x: number,
-    y: number,
-    r: number,
-    startAng: number,
-    endAng: number,
-  ) => {
-    const start = polarToCartesian(x, y, r, endAng);
-    const end = polarToCartesian(x, y, r, startAng);
-    const largeArcFlag = endAng - startAng <= 180 ? '0' : '1';
-
-    return [
-      'M',
-      start.x,
-      start.y,
-      'A',
-      r,
-      r,
-      0,
-      largeArcFlag,
-      0,
-      end.x,
-      end.y,
-    ].join(' ');
-  };
-
-  const foregroundArc = createArc(
-    center,
-    center,
-    gaugeRadius,
-    gaugeStartAngle,
-    gaugeEndAngle,
-  );
-  const backgroundArc = createArc(
-    center,
-    center,
-    gaugeRadius,
-    gaugeStartAngle,
-    gaugeStartAngle + 180,
-  );
-
-  const displayValue = percentage.toFixed(1);
-  const ratingText =
-    percentage >= 70 ? 'Good' : percentage >= 40 ? 'So-so' : 'Poor';
-
-  // 반응형 폰트 크기 계산
-  const scoreFontSize = size * 0.18 > 36 ? 36 : size * 0.18;
-  const ratingFontSize = size * 0.12 > 24 ? 24 : size * 0.12;
-
-  return (
-    <View style={[styles.gaugeChartContainer, {height: size * 0.6}]}>
-      <Svg width={size} height={size * 0.6}>
-        {/* 배경 호 */}
-        <Path
-          d={backgroundArc}
-          stroke="#baeecc"
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
-
-        {/* 전경 호 - 그라데이션 효과 */}
-        <Path
-          d={foregroundArc}
-          stroke={color}
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeLinecap="round"
-        />
-
-        {/* 게이지 끝 부분의 원 */}
-        <Circle
-          cx={polarToCartesian(center, center, gaugeRadius, gaugeEndAngle).x}
-          cy={polarToCartesian(center, center, gaugeRadius, gaugeEndAngle).y}
-          r={strokeWidth / 2}
-          fill="#FFFFFF"
-          stroke={color}
-          strokeWidth={2}
-        />
-
-        {/* 점수 텍스트 */}
-        <G x={center} y={center - 10}>
-          <SvgText
-            textAnchor="middle"
-            fontSize={scoreFontSize}
-            fontWeight="bold"
-            fill={color}>
-            {displayValue}
-          </SvgText>
-          <SvgText
-            textAnchor="middle"
-            fontSize={ratingFontSize}
-            fontWeight="bold"
-            fill={color}
-            y={30}>
-            {ratingText}
-          </SvgText>
-        </G>
-
-        {/* 0과 100 표시 */}
-        <SvgText x={10} y={center + 15} fontSize={12} fill={COLORS.text.light}>
-          {'0'}
-        </SvgText>
-        <SvgText
-          x={size - 22}
-          y={center + 15}
-          fontSize={12}
-          fill={COLORS.text.light}>
-          {'100'}
-        </SvgText>
-      </Svg>
-    </View>
-  );
-};
-
-const SafetyReportScreen = () => {
-  const navigation = useNavigation();
-  const [selected, setSelected] = useState(options[0]);
-  // Loading state used for API calls and async operations
-  const [loading, setLoading] = useState(false); // eslint-disable-line @typescript-eslint/no-unused-vars
-
-  // API 명세서에 맞게 데이터 모델 설정
-  const safetyData = {
-    score: 51.67, // 전체 안전 점수
-    acceleration: {
-      score: 40.0,
-      ratio: 60.0,
-      feedback: '급가속과 급감속이 다소 많이 발생했습니다. 부드러운 가속과 감속을 통해 안전 운전을 연습해보세요. 특히 08:20과 08:40 시간대에 급가감속이 집중적으로 발생했습니다.',
-      title: '주행 시간별 급가감속 발생',
-      chartData: [
-        {value: 30, label: '08:10', flag: false, time: '2025-04-25T08:10:00Z'},
-        {value: 70, label: '08:20', flag: true, time: '2025-04-25T08:20:00Z'},
-        {value: 40, label: '08:30', flag: false, time: '2025-04-25T08:30:00Z'},
-        {value: 60, label: '08:40', flag: true, time: '2025-04-25T08:40:00Z'},
-        {value: 35, label: '08:50', flag: false, time: '2025-04-25T08:50:00Z'},
-      ],
-    },
-    turning: {
-      // sharpTurn에 매핑
-      score: 60.0,
-      ratio: 40.0,
-      safeRatio: 60.0,
-      dangerousRatio: 40.0,
-      feedback: '회전 시 안전 비율이 60%로 양호한 편입니다. 하지만 40%의 위험 회전 비율을 개선하면 더욱 안전한 운전이 가능합니다. 회전 시 속도를 줄이고 방향지시등을 미리 켜는 습관을 들이세요.',
-      title: '내 회전 스타일 분석',
-      chartData: [
-        {
-          value: 40.0,
-          color: '#FF8A65',
-          text: '40.0%',
-          label: '위험 회전',
-          flag: true,
-          time: '2025-04-25T08:10:00Z',
-        },
-        {
-          value: 60.0,
-          color: '#68D392',
-          text: '60.0%',
-          label: '안전 회전',
-          flag: false,
-          time: '2025-04-25T08:20:00Z',
-        },
-      ],
-    },
-    speeding: {
-      // overSpeed에 매핑
-      score: 55.0,
-      violations: 3,
-      feedback: '100km/h 제한속도를 3회 초과했습니다. 특히 기간 1, 3, 6에서 속도 위반이 발생했습니다. 제한속도 준수는 안전 운전의 기본입니다. 긴 직선 도로에서도 속도계를 주시하며 운전하세요.',
-      title: '시간대별 속도 그래프',
-      speedLimit: 100,
-      chartData: [
-        {speed: 110, time: '기간 1', period: 1},
-        {speed: 64, time: '기간 2', period: 2},
-        {speed: 113, time: '기간 3', period: 3},
-        {speed: 34, time: '기간 4', period: 4},
-        {speed: 39, time: '기간 5', period: 5},
-        {speed: 118, time: '기간 6', period: 6},
-        {speed: 58, time: '기간 7', period: 7},
-        {speed: 89, time: '기간 8', period: 8},
-        {speed: 40, time: '기간 9', period: 9},
-        {speed: 32, time: '기간 10', period: 10},
-        {speed: 82, time: '기간 11', period: 11},
-        {speed: 56, time: '기간 12', period: 12},
-      ],
-    },
-  };
-
-  // 차트 데이터 포맷팅 함수
-  // 급가속/감속 바 차트 데이터 준비
-  const prepareAccelerationChartData = () => {
-    // Create value labels for data points
-    const valueLabels: Record<number, JSX.Element> = {};
-    safetyData.acceleration.chartData.forEach(
-      (item: {value: number; label: string; flag: boolean; time: string}) => {
-        valueLabels[item.value] = <AccelerationDataPoint value={item.value} />;
-      },
-    );
-
-    // Format bar chart data
-    return safetyData.acceleration.chartData.map(item => ({
-      value: item.value,
-      label: item.label,
-      frontColor: item.flag ? COLORS.chart.red : COLORS.primary, // 위험(flag=true)인 경우 빨간색, 그렇지 않으면 메인 컬러
-      topLabelComponent: () => valueLabels[item.value],
-    }));
-  };
-
-  // 회전 스타일 분석을 위한 파이 차트 데이터 준비 함수
-  const prepareTurningChartData = () => {
-    return [
-      // 위험 회전 데이터
-      {
-        value: safetyData.turning.dangerousRatio,
-        color: COLORS.chart.orange,
-        text: `${safetyData.turning.dangerousRatio}%`,
-        textColor: 'white',
-        name: '위험 회전',
-        focused: false,
-        strokeWidth: 0,
-      },
-      // 안전 회전 데이터
-      {
-        value: safetyData.turning.safeRatio,
-        color: COLORS.chart.green,
-        text: `${safetyData.turning.safeRatio}%`,
-        textColor: 'white',
-        name: '안전 회전',
-        focused: false,
-        strokeWidth: 0,
-      },
-    ];
-  };
-
-  // 과속 차트 데이터 준비 함수
-  const prepareSpeedingChartData = () => {
-    return safetyData.speeding.chartData.map(
-      (item: {speed: number; time: string; period: number}, index: number) => {
-        const isOverLimit = item.speed > safetyData.speeding.speedLimit;
-
-        return {
-          value: item.speed,
-          // 제한속도 초과 시에만 데이터 포인트에 속도값 표시
-          dataPointText: isOverLimit ? item.speed.toString() : '',
-          // 데이터 포인트가 8개 이상일 경우 짝수 인덱스에만 레이블 표시
-          label:
-            safetyData.speeding.chartData.length > 8 && index % 2 !== 0
-              ? ''
-              : `${item.period}`,
-          // 속도 제한 초과 시 강조 표시를 위한 커스텀 데이터 포인트
-          customDataPoint: isOverLimit
-            ? () => <SpeedingDataPoint />
-            : undefined,
-          showStrip: isOverLimit,
-          stripHeight: 4,
-          stripColor: COLORS.chart.red,
-          color: isOverLimit ? COLORS.chart.red : COLORS.chart.green,
-        };
-      },
-    );
-  };
-
-  // 각 차트 데이터 준비
-  const formattedBarData = prepareAccelerationChartData();
-  const pieData = prepareTurningChartData();
-  const formattedLineData = prepareSpeedingChartData();
-
+const SafetyReportScreen: React.FC<SafetyReportScreenProps> = ({
+  safetyData,
+  selectedTab,
+  options,
+  loading,
+  formattedBarData,
+  pieData,
+  formattedLineData,
+  onTabSelect,
+  onBackPress
+}) => {
   // 선택된 탭에 따라 적절한 컨텐츠 렌더링하는 함수
   const renderContent = () => {
-    switch (selected) {
+    switch (selectedTab) {
       case '급가감속':
         return renderAccelerationContent();
       case '급회전':
@@ -487,15 +196,11 @@ const SafetyReportScreen = () => {
       showText: true,
       textSize: 14,
       textColor: 'white',
-      textBackgroundColor: 'transparent', // 배경색 투명하게 변경
-      showTextBackground: false, // 텍스트 배경 비활성화
+      textBackgroundColor: 'transparent',
+      showTextBackground: false,
       radius: chartConfig.pieRadius,
       innerRadius: chartConfig.pieInnerRadius,
-      centerLabelComponent: () => ( // 중앙 라벨 컴포넌트 직접 정의
-        <View style={styles.pieCenterLabelContainer}>
-          <Text style={styles.pieCenterLabel}>회전 비율</Text>
-        </View>
-      ),
+      centerLabelComponent: () => <PieCenterLabel />,
       focusOnPress: true,
       toggleFocusOnPress: true,
       isAnimated: true,
@@ -568,7 +273,7 @@ const SafetyReportScreen = () => {
       curved: true,
       isAnimated: true,
       animationDuration: 800,
-      noOfSections: 6, // 25km/h 간격으로 6개의 섹션
+      noOfSections: 6,
       showYAxisIndices: true,
       yAxisIndicesHeight: 4,
       rulesType: 'solid',
@@ -642,7 +347,7 @@ const SafetyReportScreen = () => {
                   left: '-5%',
                   borderWidth: 1.5,
                   borderColor: COLORS.chart.red,
-                  borderStyle: 'dashed' as 'dashed',
+                  borderStyle: 'dashed',
                   zIndex: 5,
                   shadowColor: COLORS.chart.red,
                   shadowOffset: {width: 0, height: 1},
@@ -688,52 +393,31 @@ const SafetyReportScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-      {/* Header with back button and dropdown */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Icon name="chevron-left" size={24} color="#333" />
-        </TouchableOpacity>
-        <HeaderDropdown 
-          currentScreen="safety" 
-          primaryColor={COLORS.primary} 
-          textColor={COLORS.text.primary}
-        />
-        <View style={styles.placeholderRight} />
-      </View>
+      
+      {/* 헤더 섹션 (ReportHeaderSection 사용) */}
+      <ReportHeaderSection 
+        score={safetyData.score} 
+        onBackPress={onBackPress} 
+        screenType="safety" 
+      />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* 헤더 카드 */}
-        <View style={styles.reportHeader}>
-          <View style={styles.gaugeContainer}>
-            {/* GaugeChart 색상 관리 */}
-            <GaugeChart
-              percentage={safetyData.score}
-              color={
-                safetyData.score < 50 ? COLORS.chart.red : COLORS.chart.green
-              }
-              size={chartConfig.gaugeSize}
-            />
-          </View>
-        </View>
-
-        {/* Option Tabs */}
+        {/* 탭 섹션 */}
         <View style={styles.tabContainer}>
           {options.map(opt => (
             <TouchableOpacity
               key={opt}
-              onPress={() => setSelected(opt)}
+              onPress={() => onTabSelect(opt)}
               style={
-                selected === opt
+                selectedTab === opt
                   ? [styles.tabItem, styles.tabItemActive]
                   : styles.tabItem
               }
-              activeOpacity={0.7} // 터치 피드백 추가
+              activeOpacity={0.7}
             >
               <Text
                 style={
-                  selected === opt ? styles.tabTextActive : styles.tabText
+                  selectedTab === opt ? styles.tabTextActive : styles.tabText
                 }>
                 {opt}
               </Text>
@@ -741,31 +425,31 @@ const SafetyReportScreen = () => {
           ))}
         </View>
 
-        {/* Selected content */}
+        {/* 선택된 탭의 컨텐츠 표시 */}
         <View style={styles.contentContainer}>{renderContent()}</View>
 
-        {/* Robot feedback */}
+        {/* 피드백 메시지 */}
         <View style={styles.feedbackContainer}>
           <View style={styles.robotContainer}>
             <Image
               source={require('../../assets/modive_robot1.png')}
               style={styles.robotImage}
-              accessibilityLabel="모디브 로봇 아이콘" // 대체 텍스트 추가
+              accessibilityLabel="모디브 로봇 아이콘"
             />
           </View>
           <View style={styles.feedbackTextContainer}>
             <Text style={styles.feedbackTitle}>운전 피드백</Text>
             <Text style={styles.feedbackText}>
-              {selected === '급가감속'
+              {selectedTab === '급가감속'
                 ? safetyData.acceleration.feedback
-                : selected === '급회전'
+                : selectedTab === '급회전'
                 ? safetyData.turning.feedback
                 : safetyData.speeding.feedback}
             </Text>
           </View>
         </View>
 
-        {/* 로딩 상태 UI 추가 */}
+        {/* 로딩 상태 표시 */}
         {loading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={COLORS.primary} />
@@ -785,78 +469,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    padding: 12,
-    marginLeft: -8,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: COLORS.text.primary,
-  },
-  headerDropdown: {
-    marginLeft: 5,
-  },
-  placeholderRight: {
-    width: 24,
-  },
-  reportHeader: {
-    marginHorizontal: 0,
-    marginVertical: 16,
-    padding: 20,
-    borderWidth: 2,
-    borderColor: 'rgba(104, 211, 146, 0.3)',
-    borderRadius: 16,
-    backgroundColor: '#F4FCF7', // 이 부분을 '#F4FCF7'로 변경
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    alignItems: 'center',
-  },
-  headerTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '400',
-    color: '#000',
-    marginRight: 4,
-    textAlign: 'center',
-  },
-  headerScoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  headerScore: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#68D392',
-  },
-  headerScoreUnit: {
-    fontSize: 18,
-    color: '#68D392',
-    marginLeft: 4,
-  },
   tabContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginHorizontal: 0,
     marginTop: 8,
-    // borderBottomWidth: 1,  // 회색 선 제거
-    // borderBottomColor: '#E5E5E5',  // 회색 선 제거
   },
   tabItem: {
     paddingVertical: 16,
@@ -866,18 +483,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   tabItemActive: {
-    borderBottomWidth: 3, // 초록색 선 유지
-    borderBottomColor: '#68D392', // 초록색 선 유지
+    borderBottomWidth: 3,
+    borderBottomColor: '#68D392',
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: COLORS.text.secondary,
+  },
+  tabTextActive: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.primary,
   },
   contentContainer: {
-    padding: 16, // 내부 패딩 추가
-    marginTop: 0, // 상단 마진 제거
-    borderRadius: 16, // 둥근 모서리 추가
+    padding: 16,
+    marginTop: 16,
+    borderRadius: 16,
     marginHorizontal: 0,
     marginBottom: 16,
-    marginTop: 16,
-    borderWidth: 4, // 테두리 두께 추가
-    borderColor: '#D8F7E3', // 테두리 색상을 연한 민트색으로 설정
+    borderWidth: 4,
+    borderColor: '#D8F7E3',
   },
   contentBlock: {
     alignItems: 'center',
@@ -904,11 +530,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     paddingHorizontal: 16,
   },
-  gaugeContainer: {
-    marginVertical: 0,
-    marginBottom: 8,
-    alignItems: 'center',
-  },
   chartContainer: {
     marginTop: 24,
     marginBottom: 8,
@@ -916,12 +537,6 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: COLORS.chart.background,
     borderRadius: 20,
-    // 그림자 제거
-    // shadowColor: COLORS.shadow,
-    // shadowOffset: { width: 0, height: 4 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 8,
-    // elevation: 4,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.06)',
     overflow: 'hidden',
@@ -990,27 +605,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.chart.red,
     overflow: 'hidden',
-    // 가시성을 위한 그림자 추가
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.15,
     shadowRadius: 3,
     elevation: 3,
-  },
-  speedLimitLine: {
-    position: 'absolute',
-    borderWidth: 1.5,
-    borderColor: COLORS.chart.red,
-    borderStyle: 'dashed',
-    zIndex: 5,
-    shadowColor: COLORS.chart.red,
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 2,
-    elevation: 3,
-    left: -16,
-    right: -16,
-    width: 'auto',
   },
   accelerationDataPoint: {
     color: COLORS.text.light,
@@ -1022,11 +621,6 @@ const styles = StyleSheet.create({
     height: 10,
     backgroundColor: COLORS.chart.red,
     borderRadius: 5,
-  },
-  turningCenterLabel: {
-    fontSize: 20,
-    color: COLORS.text.primary,
-    fontWeight: '500',
   },
   feedbackContainer: {
     flexDirection: 'row',
@@ -1061,12 +655,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     lineHeight: 20,
-  },
-  gaugeChartContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    overflow: 'hidden',
-    marginBottom: 0,
   },
   chartInnerContainer: {
     padding: 16,
@@ -1117,10 +705,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-  pieCenterEmoji: {
-    fontSize: 28,
-    marginBottom: 6,
-  },
   pieCenterLabel: {
     fontSize: 16,
     fontWeight: '700',
@@ -1135,12 +719,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 50,
     padding: 8,
-    // 그림자 및 elevation 제거
-    // elevation: 4,
-    // shadowColor: COLORS.shadow,
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.15,
-    // shadowRadius: 3,
   },
   pointerLabelText: {
     color: COLORS.text.primary,
