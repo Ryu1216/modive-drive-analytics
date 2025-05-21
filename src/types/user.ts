@@ -1,4 +1,4 @@
-export type UseResponse = {
+export type UserResponse = {
   reward: number;
   nickname: string;
   name: string;

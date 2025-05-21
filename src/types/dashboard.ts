@@ -1,5 +1,3 @@
-import { UseResponse } from "./user";
-
 export type HomeStackParamList = {
   Dashboard: undefined;
   Feedback: undefined;

@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, Switch, StyleSheet} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import {UseResponse} from '../../../types/user';
+import {UserResponse} from '../../../types/user';
 
 type ProfileHeaderProps = {
-  userInfo: UseResponse;
+  userInfo: UserResponse;
   isEnabled: boolean;
   toggleSwitch: () => void;
 };

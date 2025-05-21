@@ -5,11 +5,11 @@ import {formatDate} from '../../utils/date';
 import ProfileHeader from './header/ProfileHeader';
 import MobtiBox from './header/MobtiBox';
 import DriveInfoGroup from './header/DriveInfoBox';
-import {UseResponse} from '../../types/user';
+import {UserResponse} from '../../types/user';
 import {DashboardResponse} from '../../types/dashboard';
 
 export type DashboardHeaderProps = {
-  userInfo: UseResponse;
+  userInfo: UserResponse;
   isEnabled: boolean;
   toggleSwitch: () => void;
   dashboard: DashboardResponse;
