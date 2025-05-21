@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import DashboardScreen from '../../screens/Dashboard/DashboardScreen.tsx';
+import DashboardContainer from '../../containers/Dashboard/DashboardContainer.tsx';
 import ReportScreen from '../../screens/Dashboard/ReportScreen.tsx';
 import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
 import DrivingHistoryScreen from '../../screens/Driving/DrivingHistoryScreen.tsx';
@@ -31,7 +31,7 @@ function DashboardStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Dashboard"
-        component={DashboardScreen}
+        component={DashboardContainer}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
