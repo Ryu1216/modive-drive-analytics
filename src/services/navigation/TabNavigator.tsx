@@ -14,7 +14,7 @@ import SafetyReportScreen from '../../screens/Driving/SafetyReportScreen.tsx';
 import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionReportScreen.tsx';
 import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
 import AttentionScoreReportScreen from '../../screens/Driving/AttentionScoreReportScreen.tsx';
-import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
+import SeedsContainer from '../../containers/Seeds/SeedContainer.tsx';
 import ScreenLayout from '../../components/common/CommonLayout.tsx';
 import CustomHeader from '../../components/common/CustomHeader.tsx';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
@@ -118,7 +118,7 @@ function SeedsStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Seeds"
-        component={SeedsScreen}
+        component={SeedsContainer}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
