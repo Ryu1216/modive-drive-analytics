@@ -6,7 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import DashboardContainer from '../../containers/Dashboard/DashboardContainer.tsx';
-import ReportScreen from '../../screens/Dashboard/ReportScreen.tsx';
+import ReportContainer from '../../containers/Dashboard/ReportContainer.tsx';
 import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
 import DrivingHistoryScreen from '../../screens/Driving/DrivingHistoryScreen.tsx';
 import DrivingDetailScreen from '../../screens/Driving/DrivingDetailScreen.tsx';
@@ -38,7 +38,7 @@ function DashboardStack() {
       />
       <Stack.Screen
         name="Feedback"
-        component={ReportScreen}
+        component={ReportContainer}
         options={{
           header: () => (
             <CustomHeader
