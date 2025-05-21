@@ -22,15 +22,15 @@ export default function WeeklyReportButton({
 const styles = StyleSheet.create({
   // LLM 피드백
   weeklyButton: {
-    backgroundColor: '#F5F5FF', // 연한 보라톤 배경
+    backgroundColor: '#F1F5FD',
     padding: 20,
-    borderRadius: 16,
+    borderRadius: 30,
 
     alignItems: 'center',
     marginTop: 20,
   },
   weeklyButtonText: {
-    color: '#4945FF',
+    color: '#3F5AF0',
     fontSize: 16,
     fontWeight: '600',
   },
