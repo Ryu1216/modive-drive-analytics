@@ -112,8 +112,7 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaProvider>
-      {/*<AppNavigator />*/}
-      <RegisterContainer />
+      <AppNavigator />
     </SafeAreaProvider>
   );
 }

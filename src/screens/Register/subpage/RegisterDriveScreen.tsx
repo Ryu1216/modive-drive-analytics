@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
-import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
+import {BlueButton} from '../../../components/common/button/BlueButton.tsx';
 import {RegisterDropdown} from '../../../components/Register/RegisterDropdown.tsx';
 import {ItemType} from 'react-native-dropdown-picker';
 
@@ -42,7 +42,7 @@ export default function RegisterDriveScreen({ value, setValues, moveNext }: Driv
         value={value}
         setValues={setValues}
       />
-      <RegisterButton title={'다음'} moveNext={moveNext} />
+      <BlueButton title={'다음'} moveNext={moveNext} />
     </View>
   );
 }

@@ -7,7 +7,7 @@ type CategoryProps = {
   categories: string[];
 };
 
-export const RegisterCategory = ( {value, setValue, categories} : CategoryProps ) => {
+export const InterestCategory = ({value, setValue, categories} : CategoryProps ) => {
 
   const renderItem = ({ item }: { item: string }) => {
     const isSelected = value === item;
@@ -25,7 +25,6 @@ export const RegisterCategory = ( {value, setValue, categories} : CategoryProps 
   };
 
   return (
-    <View style={styles.listContainer}>
       <FlatList
         data={categories}
         renderItem={renderItem}
@@ -34,22 +33,18 @@ export const RegisterCategory = ( {value, setValue, categories} : CategoryProps 
         contentContainerStyle={styles.grid}
         columnWrapperStyle={styles.columnWrapperStyle}
       />
-    </View>
+
   );
 };
 
 const styles = StyleSheet.create({
-  listContainer: {
-    height: 420,
-  },
+
   grid: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    width: 320,
-    height: 420,
   },
   columnWrapperStyle: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   button: {
     width: 130,

@@ -6,25 +6,25 @@ type ButtonProps = {
   moveNext: () => void;
 };
 
-export const RegisterButton = ({title, moveNext}:ButtonProps) => {
+export const BlueButton = ({title, moveNext}:ButtonProps) => {
   return (
-    <TouchableOpacity style={styles.nextButton} onPress={moveNext}>
-      <Text style={styles.nextButtonText}>{title}</Text>
+    <TouchableOpacity style={styles.button} onPress={moveNext}>
+      <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  nextButton: {
+  button: {
     width: '100%',
     marginTop: 40,
     backgroundColor: '#3B5BFF',
     borderRadius: 10,
-    paddingVertical: 24,
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  nextButtonText: {
+  buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',

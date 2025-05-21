@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
-import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
-import {RegisterCategory} from '../../../components/Register/RegisterCategory.tsx';
+import {BlueButton} from '../../../components/common/button/BlueButton.tsx';
+import {InterestCategory} from '../../../components/common/InterestCategory.tsx';
 
 type InterestProps = {
   value: string;
@@ -25,12 +25,12 @@ export default function RegisterInterestScreen({ value, setValue, register }: In
         content={'선택한 관심사를 중심으로 리포트를 구성해드릴게요.'}
         top={true}
       />
-      <RegisterCategory
+      <InterestCategory
         value={value}
         setValue={setValue}
         categories={categories}
       />
-      <RegisterButton
+      <BlueButton
         title={'완료'}
         moveNext={register}
       />

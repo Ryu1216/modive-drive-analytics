@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
 import {RegisterInput} from '../../../components/Register/RegisterInput.tsx';
-import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
+import {BlueButton} from '../../../components/common/button/BlueButton.tsx';
 
 type Props = {
   text: string;
@@ -23,7 +23,7 @@ export default function RegisgerCarNumScreen({ text, setText, moveNext }: Props)
         placeholder={'04히 2025"'}
         isCount={false}
       />
-      <RegisterButton
+      <BlueButton
         title={'다음'}
         moveNext={moveNext}/>
     </View>

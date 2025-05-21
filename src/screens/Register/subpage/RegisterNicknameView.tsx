@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {RegisterHeader} from '../../../components/Register/RegisterHeader.tsx';
 import {RegisterInput} from '../../../components/Register/RegisterInput.tsx';
-import {RegisterButton} from '../../../components/Register/RegisterButton.tsx';
+import {BlueButton} from '../../../components/common/button/BlueButton.tsx';
 
 type NicknameProps = {
   text: string;
@@ -24,7 +24,7 @@ export default function RegisterNicknameView({ text, setText, moveNext }: Nickna
         isCount={true}
         maxLength={10}
       />
-      <RegisterButton
+      <BlueButton
         title={'다음'}
         moveNext={moveNext}
       />

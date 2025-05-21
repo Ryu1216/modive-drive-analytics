@@ -15,13 +15,13 @@ import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionRepo
 import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
 import AttentionScoreReportScreen from '../../screens/Driving/AttentionScoreReportScreen.tsx';
 import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
-import MypageScreen from '../../screens/Mypage/MypageScreen.tsx';
 import ScreenLayout from '../../components/common/CommonLayout.tsx';
 import CustomHeader from '../../components/common/CustomHeader.tsx';
-import MypageInterestScreen from '../../screens/Mypage/subpage/MypageInterestScreen.tsx';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
-import MypageCarScreen from '../../screens/Mypage/subpage/MypageCarScreen.tsx';
-import MypageInfoScreen from '../../screens/Mypage/subpage/MypageInfoScreen.tsx';
+import {MypageContainer} from '../../containers/Mypage/MypageContainer.tsx';
+import {MypageCarContainer} from '../../containers/Mypage/MypageCarContainer.tsx';
+import {MypageInfoContainer} from '../../containers/Mypage/MypageInfoContainer.tsx';
+import {MypageInterestContainer} from '../../containers/Mypage/MypageInterestContainer.tsx';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -132,14 +132,14 @@ function MypageStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Mypage"
-        component={MypageScreen}
+        component={MypageContainer}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
       />
       <Stack.Screen
-        name="mypage_car"
-        component={MypageCarScreen}
+        name="MypageCar"
+        component={MypageCarContainer}
         options={{
           header: () => (
             <CustomHeader leftType="back" rightType="edit" title="내 차 정보" />
@@ -147,15 +147,15 @@ function MypageStack() {
         }}
       />
       <Stack.Screen
-        name="mypage_info"
-        component={MypageInfoScreen}
+        name="MypageInfo"
+        component={MypageInfoContainer}
         options={{
           header: () => <CustomHeader leftType="back" title="내 정보" />,
         }}
       />
       <Stack.Screen
-        name="mypage_interest"
-        component={MypageInterestScreen}
+        name="MypageInterest"
+        component={MypageInterestContainer}
         options={{
           header: () => <CustomHeader leftType="back" title="내 관심사" />,
         }}
