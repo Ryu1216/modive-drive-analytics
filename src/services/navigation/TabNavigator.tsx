@@ -8,8 +8,8 @@ import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons'
 import DashboardScreen from '../../screens/Dashboard/DashboardScreen.tsx';
 import ReportScreen from '../../screens/Dashboard/ReportScreen.tsx';
 import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
-import DrivingHistoryScreen from '../../screens/Driving/DrivingHistoryScreen.tsx';
-import DrivingDetailScreen from '../../screens/Driving/DrivingDetailScreen.tsx';
+import DrivingHistoryContainer from '../../containers/Driving/DrivingHistoryContainer';
+import DrivingDetailContainer from '../../containers/Driving/DrivingDetailContainer';
 import SafetyReportScreen from '../../screens/Driving/SafetyReportScreen.tsx';
 import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionReportScreen.tsx';
 import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
@@ -58,7 +58,7 @@ function DrivingStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="DrivingHistory"
-        component={DrivingHistoryScreen}
+        component={DrivingHistoryContainer} // DrivingHistoryScreen에서 Container로 변경
         options={{
           headerShown: false,
         }}
@@ -74,7 +74,7 @@ function DrivingStack() {
       />
       <Stack.Screen
         name="DrivingDetail"
-        component={DrivingDetailScreen}
+        component={DrivingDetailContainer} // DrivingDetailScreen에서 Container로 변경
         options={{
           headerShown: false,
           presentation: 'modal',
