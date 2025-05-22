@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, FlatList} from 'react-native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DashboardResponse, HomeStackParamList} from '../../types/dashboard';
-import WeeklyReportButton from '../../components/Dashboard/WeeklyReportButton';
-import DashboardHeader from '../../components/Dashboard/DashboardHeader';
-import ScoreCard from '../../components/Dashboard/DrivingScoreCard';
-import {UseResponse} from '../../types/user';
+import {UserResponse} from '../../types/user';
 import {useNavigation} from '@react-navigation/native';
+import DashboardScreen from '../../screens/Dashboard/DashboardScreen';
 
 export default function DashboardContainer() {
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
-  const [userInfo, setUserInfo] = useState<UseResponse>({
+  const [userInfo, setUserInfo] = useState<UserResponse>({
     reward: 0,
     nickname: '신예빈',
     name: '신예빈',
@@ -134,38 +131,13 @@ export default function DashboardContainer() {
   ];
 
   return (
-    <FlatList
-      data={drivingReportData}
-      keyExtractor={(_, index) => index.toString()}
-      numColumns={2}
-      columnWrapperStyle={styles.gridRow}
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      ListHeaderComponent={
-        <>
-          <DashboardHeader
-            userInfo={userInfo}
-            isEnabled={isEnabled}
-            toggleSwitch={toggleSwitch}
-            dashboard={dashboard}
-          />
-        </>
-      }
-      renderItem={({item}) => <ScoreCard {...item} />}
-      ListFooterComponent={<WeeklyReportButton navigation={navigation} />}
+    <DashboardScreen
+      drivingReportData={drivingReportData}
+      userInfo={userInfo}
+      isEnabled={isEnabled}
+      toggleSwitch={toggleSwitch}
+      dashboard={dashboard}
+      navigation={navigation}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-  },
-  gridRow: {
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-});

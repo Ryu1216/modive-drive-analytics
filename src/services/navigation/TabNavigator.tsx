@@ -5,8 +5,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import DashboardScreen from '../../screens/Dashboard/DashboardScreen.tsx';
-import ReportScreen from '../../screens/Dashboard/ReportScreen.tsx';
+import DashboardContainer from '../../containers/Dashboard/DashboardContainer.tsx';
+import ReportContainer from '../../containers/Dashboard/ReportContainer.tsx';
 import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
 import DrivingHistoryContainer from '../../containers/Driving/DrivingHistoryContainer';
 import DrivingDetailContainer from '../../containers/Driving/DrivingDetailContainer';
@@ -32,14 +32,14 @@ function DashboardStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Dashboard"
-        component={DashboardScreen}
+        component={DashboardContainer}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
       />
       <Stack.Screen
         name="Feedback"
-        component={ReportScreen}
+        component={ReportContainer}
         options={{
           header: () => (
             <CustomHeader
@@ -119,7 +119,7 @@ function SeedsStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Seeds"
-        component={SeedsScreen}
+        component={SeedsContainer}
         options={{
           header: () => <CustomHeader leftType="logo" rightType="none" />,
         }}
