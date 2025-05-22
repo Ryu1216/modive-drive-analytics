@@ -8,13 +8,14 @@ import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons'
 import DashboardContainer from '../../containers/Dashboard/DashboardContainer.tsx';
 import ReportContainer from '../../containers/Dashboard/ReportContainer.tsx';
 import DrivingScreen from '../../screens/Driving/DrivingScreen.tsx';
-import DrivingHistoryScreen from '../../screens/Driving/DrivingHistoryScreen.tsx';
-import DrivingDetailScreen from '../../screens/Driving/DrivingDetailScreen.tsx';
+import DrivingHistoryContainer from '../../containers/Driving/DrivingHistoryContainer';
+import DrivingDetailContainer from '../../containers/Driving/DrivingDetailContainer';
 import SafetyReportScreen from '../../screens/Driving/SafetyReportScreen.tsx';
-import CarbonEmissionReportScreen from '../../screens/Driving/CarbonEmissionReportScreen.tsx';
-import AccidentPreventionReportScreen from '../../screens/Driving/AccidentPreventionReportScreen.tsx';
-import AttentionScoreReportScreen from '../../screens/Driving/AttentionScoreReportScreen.tsx';
-import SeedsContainer from '../../containers/Seeds/SeedContainer.tsx';
+import CarbonEmissionReportContainer from '../../containers/Driving/CarbonEmissionReportContainer';
+import SafetyReportContainer from '../../containers/Driving/SafetyReportContainer';
+import AccidentPreventionReportContainer from '../../containers/Driving/AccidentPreventionReportContainer';
+import AttentionScoreReportContainer from '../../containers/Driving/AttentionScoreReportContainer';
+import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
 import ScreenLayout from '../../components/common/CommonLayout.tsx';
 import CustomHeader from '../../components/common/CustomHeader.tsx';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
@@ -58,7 +59,7 @@ function DrivingStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="DrivingHistory"
-        component={DrivingHistoryScreen}
+        component={DrivingHistoryContainer} // DrivingHistoryScreen에서 Container로 변경
         options={{
           headerShown: false,
         }}
@@ -74,7 +75,7 @@ function DrivingStack() {
       />
       <Stack.Screen
         name="DrivingDetail"
-        component={DrivingDetailScreen}
+        component={DrivingDetailContainer} // DrivingDetailScreen에서 Container로 변경
         options={{
           headerShown: false,
           presentation: 'modal',
@@ -83,28 +84,28 @@ function DrivingStack() {
       />
       <Stack.Screen
         name="SafetyReport"
-        component={SafetyReportScreen}
+        component={SafetyReportContainer}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="CarbonEmissionReport"
-        component={CarbonEmissionReportScreen}
+        component={CarbonEmissionReportContainer}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="AccidentPreventionReport"
-        component={AccidentPreventionReportScreen}
+        component={AccidentPreventionReportContainer}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="AttentionScoreReport"
-        component={AttentionScoreReportScreen}
+        component={AttentionScoreReportContainer}
         options={{
           headerShown: false,
         }}
