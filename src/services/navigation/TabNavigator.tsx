@@ -78,7 +78,6 @@ function DrivingStack() {
         component={DrivingDetailContainer} // DrivingDetailScreen에서 Container로 변경
         options={{
           headerShown: false,
-          presentation: 'modal',
           animation: 'slide_from_bottom',
         }}
       />
