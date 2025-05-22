@@ -5,7 +5,7 @@ import { ACCIDENT_COLORS } from '../../theme/colors';
 interface FeedbackMessageProps {
   title?: string;
   message: string;
-  screenType?: 'accident' | 'safety' | 'carbon' | 'attention';
+  screenType?: 'accident' | 'safety' | 'carbon' | 'attention' | 'main';
 }
 
 const FeedbackMessage: React.FC<FeedbackMessageProps> = ({ 
@@ -24,6 +24,8 @@ const FeedbackMessage: React.FC<FeedbackMessageProps> = ({
         return '#4299E1'; // 파란색
       case 'attention':
         return '#FFD927'; // 노란색
+      case 'main':
+        return '#4945FF'; // 서비스 메인 파란색
       default:
         return '#BB27FF';
     }
@@ -40,6 +42,8 @@ const FeedbackMessage: React.FC<FeedbackMessageProps> = ({
         return 'rgba(66, 153, 225, 0.15)'; // 연한 파란색
       case 'attention':
         return 'rgba(255, 217, 39, 0.15)'; // 연한 노란색
+      case 'main':
+        return 'rgba(73, 69, 255, 0.15)'; // 연한 메인 파란색
       default:
         return 'rgba(187, 39, 255, 0.15)';
     }

@@ -39,3 +39,98 @@ export const ACCIDENT_COLORS = {
     redEnd: 'rgba(229, 62, 62, 0.1)',
   },
 };
+
+// 안전 리포트 전용 컬러 시스템
+export const SAFETY_COLORS = {
+  primary: '#4ECD7B', // 메인 컬러 - 탭 활성화 색상과 동일하게 유지
+  danger: '#FF5252',
+  background: '#FFFFFF',
+  cardBackground: '#FCFCFC',
+  text: {
+    primary: '#2D3748',
+    secondary: '#4A5568',
+    light: '#718096',
+  },
+  border: '#E5E5E5',
+  shadow: '#000000',
+  success: '#68D392', // 메인 컬러와 동일
+  chart: {
+    green: '#68D392', // 메인 컬러와 동일하게 변경
+    red: '#E53E3E',
+    orange: '#ED8936',
+    purple: '#805AD5',
+    blue: '#4299E1',
+    yellow: '#ECC94B',
+    background: '#F9FAFC',
+    grid: '#CBD5E0',
+    lightGrid: 'rgba(203, 213, 224, 0.3)',
+  },
+};
+
+// 기존 colors.ts 파일에 추가
+export const CARBON_COLORS = {
+  primary: '#007AFF',  // 메인 컬러 - 파란색
+  danger: '#FF5252',
+  background: '#FFFFFF',
+  cardBackground: '#FCFCFC',
+  text: {
+    primary: '#2D3748',
+    secondary: '#4A5568',
+    light: '#718096',
+  },
+  border: '#E5E5E5',
+  shadow: '#000000',
+  success: '#007AFF', // 메인 컬러와 동일
+  chart: {
+    green: '#68D392',
+    red: '#E53E3E',
+    orange: '#ED8936',
+    purple: '#805AD5',
+    blue: '#007AFF', // 메인 컬러와 동일
+    yellow: '#ECC94B',
+    background: '#F9FAFC',
+    grid: '#CBD5E0',
+    lightGrid: 'rgba(203, 213, 224, 0.3)',
+    highSpeed: '#E53E3E',  // 고속 주행 - 빨간색
+    midSpeed: '#68D392',   // 중속 주행 - 파란색
+    lowSpeed: '#F8E6B6',   // 저속 주행 - 초록색
+  },
+  gradient: {
+    blueStart: 'rgba(0, 122, 255, 0.6)', // 메인 컬러 기반 그라데이션
+    blueEnd: 'rgba(0, 122, 255, 0.1)', // 메인 컬러 기반 그라데이션
+  },
+};
+
+// 기존 colors 파일에 추가
+export const ATTENTION_COLORS = {
+  primary: '#FFD927', // 메인 컬러 - 노란색
+  danger: '#FF5252',
+  background: '#FFFFFF',
+  cardBackground: '#FCFCFC',
+  text: {
+    primary: '#2D3748',
+    secondary: '#4A5568',
+    light: '#718096',
+  },
+  border: '#E5E5E5',
+  shadow: '#000000',
+  success: '#FFD927', // 메인 컬러와 동일
+  chart: {
+    green: '#68D392',
+    red: '#E53E3E',
+    orange: '#ED8936',
+    purple: '#BB27FF',
+    blue: '#4299E1',
+    yellow: '#FFD927', // 메인 컬러와 동일
+    background: '#F9FAFC',
+    grid: '#CBD5E0',
+    lightGrid: 'rgba(203, 213, 224, 0.3)',
+    inactivity: '#E53E3E', // 미조작 시간 표시 색상
+  },
+  gradient: {
+    yellowStart: 'rgba(255, 217, 39, 0.6)', // 메인 컬러 기반 그라데이션
+    yellowEnd: 'rgba(255, 217, 39, 0.1)', // 메인 컬러 기반 그라데이션
+    orangeStart: 'rgba(237, 137, 54, 0.6)',
+    orangeEnd: 'rgba(237, 137, 54, 0.1)',
+  },
+};

@@ -83,12 +83,12 @@ function DrivingStack() {
         }}
       />
       <Stack.Screen
-  name="SafetyReport"
-  component={SafetyReportContainer}
-  options={{
-    headerShown: false,
-  }}
-/>
+        name="SafetyReport"
+        component={SafetyReportContainer}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="CarbonEmissionReport"
         component={CarbonEmissionReportContainer}

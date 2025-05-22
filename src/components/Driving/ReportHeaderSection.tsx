@@ -21,13 +21,13 @@ const ReportHeaderSection: React.FC<ReportHeaderSectionProps> = ({
       case 'accident':
         return '#BB27FF'; // 보라색
       case 'safety':
-        return '#68D392'; // 초록색 (수정됨)
+        return '#68D392'; // 초록색
       case 'carbon':
-        return '#4299E1'; // 파란색 (수정됨)
+        return '#4299E1'; // 파란색
       case 'attention':
         return '#FFD927'; // 노란색
       default:
-        return '#BB27FF'; 
+        return '#BB27FF';
     }
   };
   
@@ -40,9 +40,9 @@ const ReportHeaderSection: React.FC<ReportHeaderSectionProps> = ({
       case 'accident':
         return '#F5E9FF'; // 연한 보라색
       case 'safety':
-        return 'rgba(104, 211, 146, 0.1)'; // 연한 초록색 (수정됨)
+        return 'rgba(104, 211, 146, 0.1)'; // 연한 초록색
       case 'carbon':
-        return 'rgba(66, 153, 225, 0.1)'; // 연한 파란색 (수정됨)
+        return 'rgba(66, 153, 225, 0.1)'; // 연한 파란색
       case 'attention':
         return '#FFFAEB'; // 연한 노란색
       default:
@@ -56,9 +56,9 @@ const ReportHeaderSection: React.FC<ReportHeaderSectionProps> = ({
       case 'accident':
         return 'rgba(187, 39, 255, 0.5)'; // 보라색 (불투명도 증가)
       case 'safety':
-        return 'rgba(104, 211, 146, 0.7)'; // 초록색 (불투명도 증가)
+        return 'rgba(104, 211, 146, 0.5)'; // 초록색 (불투명도 증가)
       case 'carbon':
-        return 'rgba(66, 153, 225, 0.7)'; // 파란색 (불투명도 증가)
+        return 'rgba(66, 153, 225, 0.5)'; // 파란색 (불투명도 증가)
       case 'attention':
         return 'rgba(255, 217, 39, 0.5)'; // 노란색 (불투명도 증가)
       default:
@@ -88,6 +88,7 @@ const ReportHeaderSection: React.FC<ReportHeaderSectionProps> = ({
     borderColor: getBorderColor(),
     backgroundColor: getCardBackgroundColor(),
     borderWidth: 2.5, // 테두리 두께 증가
+    shadowOpacity: 0.05, // 그림자 불투명도 감소
   };
   
   // 점수에 따른 게이지 색상 설정 (낮은 점수는 빨간색)
@@ -145,16 +146,16 @@ const styles = StyleSheet.create({
     width: 24, // 오른쪽 공간 확보
   },
   reportHeader: {
-    marginHorizontal: 0, // 좌우 여백 없음
+    marginHorizontal: 0,
     marginVertical: 16,
     padding: 20,
     borderWidth: 2,
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 1}, // 그림자 오프셋 감소
+    // shadowOpacity: 0.05, // 그림자 불투명도 감소
+    // shadowRadius: 2, // 그림자 범위 감소
+    // elevation: 2, // 안드로이드 그림자 높이 감소
     alignItems: 'center',
   },
   gaugeContainer: {

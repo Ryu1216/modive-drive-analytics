@@ -74,10 +74,10 @@ export interface AttentionScoreData {
   drivingTime: {
     score: number;
     feedback: string;
-    graph: Array<{
+    graph: {
       startTime: string;
       endTime: string;
-    }>;
+    }[];
   };
   inactivity: {
     score: number;
