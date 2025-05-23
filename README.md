@@ -3,8 +3,7 @@
 ![Modive Logo](src/assets/modive_logo.svg)
 
 [![npm version](https://img.shields.io/npm/v/@modive/core.svg)](https://www.npmjs.com/package/@modive/core)
-[![Build Status](https://github.com/yourusername/modive-drive-analytics/workflows/CI/badge.svg)](https://github.com/yourusername/modive-drive-analytics/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 ## 프로젝트 소개
 
