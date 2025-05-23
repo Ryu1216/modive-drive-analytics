@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, FlatList, ActivityIndicator } from 'react-native';
 import DrivingHistoryItem from '../../components/Driving/DrivingHistoryItem';
 import DrivingHistoryChart from '../../components/Driving/DrivingHistoryChart';
 import { DriveHistoryItem } from '../../types/driving';
@@ -8,12 +8,38 @@ import { colors } from '../../theme/colors';
 interface DrivingHistoryScreenProps {
   driveHistory: DriveHistoryItem[];
   handleDriveItemPress: (driveId: string) => void;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const DrivingHistoryScreen: React.FC<DrivingHistoryScreenProps> = ({ 
   driveHistory = [], // 기본값 제공 
-  handleDriveItemPress 
+  handleDriveItemPress, 
+  isLoading, 
+  error 
 }) => {
+  // 로딩 및 에러 처리 추가
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>데이터를 불러오는 중...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
@@ -120,6 +146,25 @@ const styles = StyleSheet.create({
   },
   listContentContainer: {
     paddingBottom: 100,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: colors.neutralDark,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 16,
+    color: colors.error,
   },
 });
 
