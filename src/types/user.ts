@@ -1,4 +1,5 @@
 export type UserResponse = {
+  userId: number;
   reward: number;
   nickname: string;
   name: string;
@@ -9,3 +10,17 @@ export type UserResponse = {
   gender: 'male' | 'female' | null;
   phone: string | null;
 };
+
+export interface LoginWithKakaoRequest {
+  accessToken: string;
+}
+
+export interface TokenRefreshRequest {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface TokenRefreshResponse {
+  accessToken: string;
+  refreshToken: string;
+}

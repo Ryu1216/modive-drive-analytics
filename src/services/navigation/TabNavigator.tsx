@@ -15,7 +15,7 @@ import CarbonEmissionReportContainer from '../../containers/Driving/CarbonEmissi
 import SafetyReportContainer from '../../containers/Driving/SafetyReportContainer';
 import AccidentPreventionReportContainer from '../../containers/Driving/AccidentPreventionReportContainer';
 import AttentionScoreReportContainer from '../../containers/Driving/AttentionScoreReportContainer';
-import SeedsScreen from '../../screens/Seeds/SeedsScreen.tsx';
+import SeedsContainer from '../../containers/Seeds/SeedContainer.tsx';
 import ScreenLayout from '../../components/common/CommonLayout.tsx';
 import CustomHeader from '../../components/common/CustomHeader.tsx';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
@@ -23,6 +23,8 @@ import {MypageContainer} from '../../containers/Mypage/MypageContainer.tsx';
 import {MypageCarContainer} from '../../containers/Mypage/MypageCarContainer.tsx';
 import {MypageInfoContainer} from '../../containers/Mypage/MypageInfoContainer.tsx';
 import {MypageInterestContainer} from '../../containers/Mypage/MypageInterestContainer.tsx';
+import {RegisterContainer} from '../../containers/Register/RegisterContainer.tsx';
+import SocialLoginScreen from '../../screens/Register/SocialLoginScreen.tsx';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -170,7 +172,7 @@ export default function TabNavigator() {
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarIcon: ({color, size}) => {
-          if (route.name === '홈')
+          if (route.name === 'Home')
             return <AntDesign name="home" size={size} color={color} />;
           if (route.name === '주행기록')
             return <Feather name="pie-chart" size={size} color={color} />;
@@ -188,7 +190,7 @@ export default function TabNavigator() {
         tabBarActiveTintColor: '#4945FF',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="홈">
+      <Tab.Screen name="Home">
         {() => (
           <ScreenLayout>
             <DashboardStack />
@@ -216,6 +218,7 @@ export default function TabNavigator() {
           </ScreenLayout>
         )}
       </Tab.Screen>
+      <Tab.Screen name="login">{() => <SocialLoginScreen />}</Tab.Screen>
     </Tab.Navigator>
   );
 }
